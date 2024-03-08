@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+    <title><% title %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+</head>
+<body>
+<h1><%= title %></h1>
+
+<% data.forEach(student => { %>
+    <p><strong>Name:</strong> <%= student.first_name %> <%= student.last_name %></p>
+    <p><strong>Date of Birth:</strong> <%= student.dob %></p>
+    <% if (student.img) { %>
+        <img src="<%= student.img %>" width="200" height="200">
+    <% } %>
+    <hr>
+<% }); %>
+<hr>
+<a href="/">Add New Student</a>
+</body>
+
+
+</html>

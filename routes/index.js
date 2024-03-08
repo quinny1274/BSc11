@@ -18,7 +18,11 @@ let upload = multer({storage: storage});
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Home' });
+});
+
+router.get('/explore', function(req, res, next) {
+  res.render('explore', { title: 'Explore' });
 });
 
 router.post('/add', upload.single('myImg'), function(req, res, next) {

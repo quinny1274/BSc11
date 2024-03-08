@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var students = require('../controllers/students')
+var plants = require('../controllers/plants')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -12,7 +12,7 @@ router.get('/explore', function(req, res, next) {
 });
 
 router.get('/display', function(req, res, next) {
-  let result = students.getAll()
+  let result = plants.getAll()
   result.then(students => {
     let data = JSON.parse(students);
     res.render('display', {title: 'View All Students', data: data});

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const mongoDB = 'mongodb://localhost:27017/users';
+const mongoDB = 'mongodb://localhost:27017/BSc11DB';
 let connection;
 
 mongoose.Promise = global.Promise;

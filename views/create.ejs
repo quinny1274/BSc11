@@ -15,18 +15,38 @@
     <h1><%= title %></h1>
     <div>
         <form action="/create/add" method="POST" enctype="multipart/form-data">
-            <label for="firstName">First Name:</label>
-            <input type="text" id="firstName" name="first_name" required><br>
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
             <br>
-            <label for="lastName">First Name:</label>
-            <input type="text" id="lastName" name="last_name" required><br>
             <br>
-            <label for="dateOfBirth">First Name:</label>
-            <input type="date" id="dateOfBirth" name="dob" required><br>
+            <label for="location">location:</label>
+            <input type="text" id="location" name="location" required>
+            <br>
+            <br>
+            <label for="description">description:</label>
+            <input type="text" id="description" name="description" required>
+            <br>
+            <br>
+            <label for="size">size:</label>
+            <input type="number" id="size" name="size" required>
+            <br>
+            <br>
+            <label for="flowers">flowers:</label>
+            <input type="checkbox" id="flowers" name="flowers" >
+            <br>
+            <br>
+            <label for="leaves">leaves:</label>
+            <input type="checkbox" id="leaves" name="leaves" >
+            <br>
+            <br>
+            <label for="fruit">fruit:</label>
+            <input type="checkbox" id="fruit" name="fruit" >
+            <br>
             <br>
             <label for="myImage">Choose an image</label><br><br>
             <input type="file" id="myImage" name="myImg" accept="image/*" required>
-            <br><br>
+            <br>
+            <br>
             <button type="Submit">Submit</button>
         </form>
     </div>

@@ -1,5 +1,5 @@
 var express = require('express');
-const students = require("../controllers/students");
+const plants = require("../controllers/plants");
 const multer = require("multer");
 var router = express.Router();
 
@@ -23,7 +23,7 @@ router.get('/', function(req, res, next) {
 router.post('/add', upload.single('myImg'), function(req, res, next) {
     let userData = req.body;
     let filePath = req.file.path;
-    let result = students.create(userData, filePath);
+    let result = plants.create(userData, filePath, "bob");
     console.log(result);
     res.redirect('/display');
 });

@@ -11,6 +11,9 @@ var createRouter = require('./routes/create');
 var app = express();
 
 app.use('/public/images/uploads', express.static(path.join(__dirname, '/public/images/uploads')));
+app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')));
+app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')));
+app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

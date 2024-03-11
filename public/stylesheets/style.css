@@ -6,3 +6,19 @@ body {
 a {
   color: #00B7FF;
 }
+
+.cropped-image {
+  width: 200px;
+  height: 300px;
+  object-fit: cover;
+}
+
+.cropped-image-mobile {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+}
+
+.card-description {
+  font-size: 14px;
+}

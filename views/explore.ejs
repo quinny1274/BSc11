@@ -3,14 +3,36 @@
 <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+
 </head>
 <body>
-<h1><%= title %></h1>
-<div>
-    <a href="/create">
-        <button>Create Page</button>
-    </a>
-</div>
-<img src="/images/testImage.png" alt="Test Image">
+    <h1><%= title %></h1>
+    <div>
+        <a href="/create">
+            <button>Create Page</button>
+        </a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4 pt-4">
+        <% data.forEach(plant => { %>
+        <div class="col">
+            <div class="card h-100">
+                <img src="<%= plant.img %>" class="card-img-top cropped-image" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Identification goes here</h5>
+                    <p class="card-text"><%= plant.description %></p>
+                </div>
+                <div class="card-footer">
+                    <% const date = new Date(Date.parse(plant.date)); %>
+                    <small class="text-muted">Found at <%= plant.location + ", on " + date.toLocaleDateString('en-GB'); %></small>
+                </div>
+            </div>
+        </div>
+        <% }); %>
+    </div>
+
+
+
 </body>
 </html>

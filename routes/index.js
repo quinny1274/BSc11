@@ -8,7 +8,11 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/explore', function(req, res, next) {
-  res.render('explore', { title: 'Explore' });
+  let result = plants.getAll()
+  result.then(plants => {
+    let data = JSON.parse(plants);
+    res.render('explore', { title: 'Explore', data: data });
+  })
 });
 
 router.get('/display', function(req, res, next) {

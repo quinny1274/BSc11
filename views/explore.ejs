@@ -16,19 +16,21 @@
 
     <div class="row row-cols-1 row-cols-md-3 g-4 pt-4">
         <% data.forEach(plant => { %>
-        <div class="col">
-            <div class="card h-100">
-                <img src="<%= plant.img %>" class="card-img-top cropped-image" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Identification goes here</h5>
-                    <p class="card-text"><%= plant.description %></p>
-                </div>
-                <div class="card-footer">
-                    <% const date = new Date(Date.parse(plant.date)); %>
-                    <small class="text-muted">Found at <%= plant.location + ", on " + date.toLocaleDateString('en-GB'); %></small>
-                </div>
+            <div class="col">
+                <a href="/plants/<%= plant._id %>">
+                    <div class="card h-100">
+                        <img src="<%= plant.img %>" class="card-img-top cropped-image" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Identification goes here</h5>
+                            <p class="card-text"><%= plant.description %></p>
+                        </div>
+                        <div class="card-footer">
+                            <% const date = new Date(Date.parse(plant.date)); %>
+                            <small class="text-muted">Found at <%= plant.location + ", on " + date.toLocaleDateString('en-GB'); %></small>
+                        </div>
+                    </div>
+                </a>
             </div>
-        </div>
         <% }); %>
     </div>
 

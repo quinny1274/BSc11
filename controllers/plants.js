@@ -35,3 +35,13 @@ exports.getAll = function () {
     });
 };
 
+exports.getPlant = function (plantId) {
+    return plantModel.findById(plantId)
+        .then(plant => {
+            return plant;
+        })
+        .catch(err => {
+            console.error('Error fetching plant:', err);
+            return null;
+        });
+};

@@ -23,4 +23,18 @@ router.get('/display', function(req, res, next) {
   })
 });
 
+router.get('/plants/:id', async function(req, res) {
+  const plantId = req.params.id;
+  try {
+    const plant = await plants.getPlant(plantId);
+    if (!plant) {
+      return res.status(404).send('Plant not found');
+    }
+    res.render('plants', { title: 'Plant Page', plant: plant });
+  } catch (err) {
+    console.error('Error fetching plant:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 module.exports = router;

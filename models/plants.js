@@ -15,8 +15,6 @@ let PlantSchema = new Schema(
         //TODO identification
         img: {type: String},
         nickname: {type: String},
-        //     chat: {type: Schema.Types.UUID}
-        chat: {type: String}
     }
 );
 

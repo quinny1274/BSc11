@@ -1,7 +1,7 @@
 exports.init = function (io) {
     io.sockets.on('connection', function (socket) {
         try {
-            socket.on('create or join', function (room, userId) {
+            socket.on('join', function (room, userId) {
                 socket.join(room);
                 io.sockets.to(room).emit('joined', room, userId);
             });

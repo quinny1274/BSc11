@@ -11,7 +11,6 @@ exports.create = function (userData, filePath, nickname) {
         fruit: userData.fruit === 'on',
         img: filePath,
         nickname: nickname,
-        chat: "w"
     });
 
     return plant.save().then(plant => {

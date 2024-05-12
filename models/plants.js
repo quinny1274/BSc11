@@ -11,6 +11,8 @@ let PlantSchema = new Schema(
         flowers: {type: Boolean},
         leaves: {type: Boolean},
         fruit: {type: Boolean},
+        sunExposure: {type: String},
+        flowerColour: {type: String},
         //TODO other options
         //TODO identification
         img: {type: String},

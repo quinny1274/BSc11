@@ -2,11 +2,11 @@
 <html>
 <head>
     <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css'/>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
 
 </head>
-<body>
+<body class="">
     <h1><%= title %></h1>
     <div>
         <a href="/create">
@@ -23,6 +23,8 @@
                         <div class="card-body">
                             <h5 class="card-title">Identification goes here</h5>
                             <p class="card-text"><%= plant.description %></p>
+                            <br>
+                            <button class="btn btn-primary">View Plant</button>
                         </div>
                         <div class="card-footer">
                             <% const date = new Date(Date.parse(plant.date)); %>

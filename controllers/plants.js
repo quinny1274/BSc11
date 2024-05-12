@@ -9,6 +9,8 @@ exports.create = function (userData, filePath, nickname) {
         flowers: userData.flowers === 'on',
         leaves: userData.leaves === 'on',
         fruit: userData.fruit === 'on',
+        sunExposure: userData.sunExposure,
+        flowerColour: userData.flowerColour,
         img: filePath,
         nickname: nickname,
     });

@@ -1,3 +1,5 @@
+const chats = require("../controllers/chats");
+
 exports.init = function (io) {
     io.sockets.on('connection', function (socket) {
         try {
@@ -7,6 +9,7 @@ exports.init = function (io) {
             });
             socket.on('chat', function (room, userId, chatText) {
                 io.sockets.to(room).emit('chat', room, userId, chatText);
+                chats.create(room, chatText, userId);
             });
             socket.on('disconect', function () {
                 console.log('someone disconnected');

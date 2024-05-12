@@ -1,19 +1,35 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="/javascripts/plants.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Plant Page</title>
 </head>
-<body>
+<body onload="init('<%= plant.id %>', 'bob')">
     <p><%= plant.description %></p>
+    
     <br>
     <div class="col-lg-6 my-4">
         <iframe
             src="https://www.google.com/maps/embed?q=sheffield&t=&z=13&ie=UTF8&iwloc=&output=embed"
             class="w-100" height="400" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+
+    <div id="chat_interface" style="display: block">
+        <div id="history" class="boxed"></div>
+        <div id="input" class="button boxed">
+            <form onsubmit="return false;" style="width: 100%">
+                <p>
+                    <label for="name">chat: </label>
+                    <input type="text" id="chat_input" name="chat_input" style="width: 80%">
+                    <button id="chat_send" onclick="sendChatText()">Send</button>
+                </p>
+            </form>
+        </div>
     </div>
 
 </body>

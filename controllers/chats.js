@@ -28,8 +28,19 @@ exports.getAll = function () {
     });
 };
 
-exports.getPlant = function (chatId) {
+exports.getChat = function (chatId) {
     return chatModel.findById(chatId)
+        .then(plant => {
+            return plant;
+        })
+        .catch(err => {
+            console.error('Error fetching chat:', err);
+            return null;
+        });
+};
+
+exports.getChats = function (chatId) {
+    return chatModel.find({ chatId: chatId })
         .then(plant => {
             return plant;
         })

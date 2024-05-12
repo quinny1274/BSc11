@@ -2,19 +2,22 @@ let name = null;
 let roomNo = null;
 let socket = io();
 
-function init(a, b) {
+function init(plantId, nickname) {
     socket.on('joined', function (room, userId) {
         if (userId === name) {
         } else {
-            writeOnHistory('<b>'+userId+'</b>'+'joined room'+room)
+            writeOnHistory('<b>' + userId + '</b>' + 'joined room' + room)
         }
     });
     socket.on('chat', function (room, userId, chatText) {
         let who = userId
-        if (userId === name) who = 'Me';
-        writeOnHistory('<b>'+who+'</b>'+chatText)
+        if (userId === name) {
+            who = 'Me';
+        }
+        writeOnHistory('<b>' + who + ':</b> ' + chatText)
     })
-    connectToRoomUUID(a, b)
+    connectToRoomUUID(plantId, nickname)
+    socket.emit('history', roomNo);
 }
 
 function sendChatText() {
@@ -23,9 +26,9 @@ function sendChatText() {
     socket.emit('chat', roomNo, name, chatText);
 }
 
-function connectToRoomUUID(a, b) {
-    roomNo = a;
-    name = b;
+function connectToRoomUUID(plantId, nickname) {
+    roomNo = plantId;
+    name = nickname;
     socket.emit('join', roomNo, name);
 }
 

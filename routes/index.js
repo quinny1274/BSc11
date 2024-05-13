@@ -31,6 +31,13 @@ router.post('/plants/addSuggestion', function (req, res) {
   res.redirect(`/plants/${userData.plantId}`);
 });
 
+router.post('/plants/updateName', function (req, res) {
+  let userData = req.body;
+  let result = plants.updateName(userData);
+  console.log(result);
+  res.redirect(`/plants/${userData.plantId}`);
+});
+
 router.get('/plants/:id', async function(req, res) {
   const plantId = req.params.id;
   try {

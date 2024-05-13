@@ -86,9 +86,16 @@
 
     <% if (wasPlantCreatedByUser && plant.enableSuggestions) { %>
         <p>Suggestions:</p>
-        <% for (var i = 0; i < suggestions.length; i++) { %>
-            <p><%= suggestions[i].suggestedName %></p>
-        <% } %>
+        <form action="/plants/updateName" method="POST">
+            <input type="hidden" id="plantId" name="plantId" value="<%= plant.id %>">
+            <% for (var i = 0; i < suggestions.length; i++) { %>
+                <label for="<%= i %>"><%= suggestions[i].suggestedName %></label>
+                <input type="radio" id="<%= i %>" name="suggestedName" value="<%= suggestions[i].suggestedName %>" required>
+                <br>
+                <br>
+            <% } %>
+            <button type="Submit">Submit</button>
+        </form>
     <% } else if (!wasPlantCreatedByUser && suggestions.length >= 2){ %>
         <p>Your Suggestions:</p>
         <% for (var i = 0; i < suggestions.length; i++) { %>

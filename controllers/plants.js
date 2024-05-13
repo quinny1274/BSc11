@@ -50,3 +50,20 @@ exports.getPlant = function (plantId) {
             return null;
         });
 };
+
+exports.updateName = function (userData) {
+    return plantModel.findByIdAndUpdate(userData.plantId, { name: userData.suggestedName, enableSuggestions: false }, { new: true })
+      .then(updatedPlant => {
+          if (updatedPlant) {
+              console.log("Plant name updated successfully:", updatedPlant);
+              return JSON.stringify(updatedPlant);
+          } else {
+              console.log("Plant not found with the given ID:", userData.plantId);
+              return null;
+          }
+      })
+      .catch(err => {
+          console.error('Error updating plant name:', err);
+          return null;
+      });
+};

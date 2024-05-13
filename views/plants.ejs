@@ -84,7 +84,7 @@
 <!--            class="w-100" height="400" allowfullscreen="" loading="lazy"></iframe>-->
 <!--    </div>-->
 
-    <% if (wasPlantCreatedByUser && plant.enableSuggestions) { %>
+    <% if (wasPlantCreatedByUser && plant.enableSuggestions && suggestions.length !== 0) { %>
         <p>Suggestions:</p>
         <form action="/plants/updateName" method="POST">
             <input type="hidden" id="plantId" name="plantId" value="<%= plant.id %>">

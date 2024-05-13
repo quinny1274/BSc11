@@ -1,4 +1,5 @@
 const plantModel = require('../models/plants');
+const { SparqlEndpointFetcher } = require("fetch-sparql-endpoint");
 
 exports.create = function (userData, filePath, nickname) {
     let plant = new plantModel({
@@ -15,6 +16,7 @@ exports.create = function (userData, filePath, nickname) {
         flowerColour: userData.flowerColour,
         img: filePath,
         nickname: nickname,
+        chat: "w"
     });
 
     return plant.save().then(plant => {

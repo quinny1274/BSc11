@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var plants = require('../controllers/plants')
-const { fetchDBpedia } = require('../controllers/plants');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -38,12 +37,12 @@ router.get('/plants/:id', async function(req, res) {
     const sparqlQuery = `
   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
   PREFIX dbo: <http://dbpedia.org/ontology/>
-  SELECT ?uri ?label ?abstract
+  SELECT ?uri ?label ?comment
   WHERE {
     ?uri rdfs:label ?label .
-    ?uri dbo:abstract ?abstract .
+    ?uri rdfs:comment ?comment .
     FILTER (langMatches(lang(?label), "en")) .
-    FILTER (langMatches(lang(?abstract), "en")) .
+    FILTER (langMatches(lang(?comment), "en")) .
     FILTER (?uri = <${resource}>)
   }
 `;
@@ -64,18 +63,18 @@ router.get('/plants/:id', async function(req, res) {
             res.render('plants', {
               title: 'Plant Page',
               plant: plant,
-              title2: bindings[0].label.value,
-              abstract: bindings[0].abstract.value,
-              uri: bindings[0].uri.value
+              dbp_title: bindings[0].label.value,
+              dbp_comment: bindings[0].comment.value,
+              dbp_uri: bindings[0].uri.value
             });
           } else {
             // Render the page without DBpedia stuff
             res.render('plants', {
               title: 'Plant Page',
               plant: plant,
-              title2: '', // Provide empty values for DBpedia properties
-              abstract: '',
-              uri: ''
+              dbp_title: '', // Provide empty values for DBpedia properties
+              dbp_comment: '',
+              dbp_uri: ''
             });
           }
         })
@@ -85,9 +84,9 @@ router.get('/plants/:id', async function(req, res) {
           res.render('plants', {
             title: 'Plant Page',
             plant: plant,
-            title2: '', // Provide empty values for DBpedia properties
-            abstract: '',
-            uri: ''
+            dbp_title: '', // Provide empty values for DBpedia properties
+            dbp_comment: '',
+            dbp_uri: ''
           });
         });
   } catch (err) {

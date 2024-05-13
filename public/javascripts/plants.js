@@ -39,3 +39,7 @@ function writeOnHistory(text) {
     history.appendChild(paragraph)
     document.getElementById('chat_input').value = '';
 }
+
+function back() {
+
+}

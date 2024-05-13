@@ -1,16 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-    <script src="/javascripts/plants.js"></script>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="/javascripts/plants.js"></script>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel='stylesheet' href='/stylesheets/style.css'/>
-    <script src="/javascripts/index.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
@@ -18,33 +14,78 @@
     <title>Plant Page</title>
 </head>
 <body onload="init('<%= plant.id %>', 'bob')">
-    <p><%= plant.description %></p>
+    <a href="/explore">
+        <button class="btn btn-secondary">← Back</button>
+    </a>
 
-    <br>
-    <div class="col-lg-6 my-4">
-        <iframe
-            src="https://www.google.com/maps/embed?q=sheffield&t=&z=13&ie=UTF8&iwloc=&output=embed"
-            class="w-100" height="400" allowfullscreen="" loading="lazy"></iframe>
-    </div>
+    <div class="row pt-5">
+        <div class="col-md-6">
+            <img src="/<%= plant.img %>" class="card-img-top cropped-image mb-3" alt="<%= plant.description %>">
+        </div>
 
-    <div id="chat_interface" style="display: block">
-        <div id="history" class="boxed"></div>
-        <div id="input" class="button boxed">
-            <form onsubmit="return false;" style="width: 100%">
-                <p>
-                    <label for="name">chat: </label>
-                    <input type="text" id="chat_input" name="chat_input" style="width: 80%">
-                    <button id="chat_send" onclick="sendChatText()">Send</button>
-                </p>
-            </form>
+        <div class="col-md-6">
+            <div class="d-flex align-items-center">
+                <h3 class="mr-3 mx-2"><%= dbp_title %></h3>
+                <p class="mb-0 text-light-emphasis">Identification:</p>
+                <p class="mb-0 text-success mx-1 ">Approved</p>
+            </div>
+
+            <a href="" class="mx-2 my-2">Suggest an identification</a>
+
+            <p class="mx-2"><%= dbp_comment %></p>
+            <% if (dbp_uri) { %>
+                <a class="btn btn-primary mx-2" href="<%= dbp_uri %>">Learn more</a>
+            <% } %>
         </div>
     </div>
 
-    <h1><%= title2 %></h1>
-    <p><%= abstract %></p>
-    <% if (uri) { %>
-        <a href="<%= uri %>">Link to DBpedia page</a>
-    <% } %>
+    <div class="row pt-5">
+        <div class="col-md-6">
+            <div class="d-flex align-items-center">
+                <p class="mr-3 text-light-emphasis">Name:</p>
+                <p class="mx-2"><b><%= plant.name %></b></p>
+            </div>
+            <div class="d-flex align-items-center">
+                <p class="mr-3 text-light-emphasis">Description:</p>
+                <p class="mx-2"><b><%= plant.description %></b></p>
+            </div>
+            <div class="d-flex align-items-center">
+                <p class="mr-3 text-light-emphasis">Date:</p>
+                <p class="mx-2"><b><%= plant.date %></b></p>
+            </div>
+            <div class="d-flex align-items-center">
+                <p class="mr-3 text-light-emphasis">Size:</p>
+                <p class="mx-2"><b><%= plant.size %></b></p>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div id="chat_interface" style="display: block">
+                <div id="history" class="boxed"></div>
+                <div id="input" class="button boxed">
+                    <form onsubmit="return false;" style="width: 100%">
+                        <p>
+                            <label for="name">chat: </label>
+                            <input type="text" id="chat_input" name="chat_input" style="width: 80%">
+                            <button id="chat_send" onclick="sendChatText()">Send</button>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+<!--    <div class="col-lg-6 my-4">-->
+<!--        <iframe-->
+<!--            src="https://www.google.com/maps/embed?q=sheffield&t=&z=13&ie=UTF8&iwloc=&output=embed"-->
+<!--            class="w-100" height="400" allowfullscreen="" loading="lazy"></iframe>-->
+<!--    </div>-->
+
+
+
 
 </body>
 </html>

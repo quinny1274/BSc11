@@ -28,8 +28,7 @@ router.post('/plants/addSuggestion', function (req, res) {
   let userData = req.body;
   let result = suggestionsController.create(userData, "bob");
   console.log(result);
-  // res.redirect(`/plants/${userData.plantId}`);
-  res.redirect(`/explore`);
+  res.redirect(`/plants/${userData.plantId}`);
 });
 
 router.get('/plants/:id', async function(req, res) {
@@ -41,7 +40,7 @@ router.get('/plants/:id', async function(req, res) {
     }
     let nickname = "bob"; //When nickname is implemented all occurances of bob should be replaced with the actual nickname
     let wasPlantCreatedByUser = plant.nickname === nickname;
-    const suggestions = getSuggestions(wasPlantCreatedByUser, plantId, nickname);
+    const suggestions = await getSuggestions(wasPlantCreatedByUser, plantId, nickname);
 
     const plantName = plant.description;
     const resource = `http://dbpedia.org/resource/${plantName}`;
@@ -120,7 +119,7 @@ async function getSuggestions(wasPlantCreatedByUser, plantId, nickname) {
   if (wasPlantCreatedByUser) {
     suggestions = await suggestionsController.getSuggestions(plantId);
   } else {
-    suggestions = await suggestionsController.getSuggestions(plantId, nickname);
+    suggestions = await suggestionsController.getSuggestionsForUser(plantId, nickname);
   }
 
   return suggestions;

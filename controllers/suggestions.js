@@ -50,8 +50,8 @@ exports.getSuggestions = function (plantId) {
         });
 };
 
-exports.getSuggestions = function (plantId, nickname) {
-    return suggestionsModel.find({ plantId: plantId, nickname: nickname})
+exports.getSuggestionsForUser = function (plantId, nickname) {
+    return suggestionsModel.find({ plantId: plantId, user: nickname })
         .then(plant => {
             return plant;
         })

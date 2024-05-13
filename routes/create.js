@@ -25,7 +25,8 @@ router.post('/add', upload.single('myImg'), function(req, res, next) {
     let filePath = req.file.path;
     let result = plants.create(userData, filePath, "bob");
     console.log(result);
-    res.redirect('/display');
+    // res.redirect(`/plants/${result._id}`);
+    res.redirect(`/explore`);
 });
 
 module.exports = router;

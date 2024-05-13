@@ -13,6 +13,14 @@
     <h1><%= title %></h1>
     <div>
         <form action="/create/add" method="POST" enctype="multipart/form-data">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <br>
+            <br>
+            <label for="enableSuggestions">Enable User Suggestions:</label>
+            <input type="checkbox" id="enableSuggestions" name="enableSuggestions" >
+            <br>
+            <br>
             <label for="date">Date:</label>
             <input type="date" id="date" name="date" required>
             <br>

@@ -15,7 +15,7 @@ exports.init = function (io) {
                 console.log('someone disconnected');
             });
             socket.on('history', async function (room) {
-                chatList = await chats.getChats(room);
+                let chatList = await chats.getChats(room);
                 if (chatList) {
                     chatList.forEach(chat => io.sockets.to(socket.id).emit('chat', room, chat.user, chat.message));
                 }

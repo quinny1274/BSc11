@@ -2,6 +2,8 @@ const plantModel = require('../models/plants');
 
 exports.create = function (userData, filePath, nickname) {
     let plant = new plantModel({
+        name: userData.name,
+        enableSuggestions: userData.enableSuggestions === 'on',
         date: userData.date,
         location: userData.location,
         description: userData.description,

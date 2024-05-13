@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var plants = require('../controllers/plants')
+var plants = require('../controllers/plants');
+var suggestionsController = require('../controllers/suggestions');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -23,6 +24,14 @@ router.get('/display', function(req, res, next) {
   })
 });
 
+router.post('/plants/addSuggestion', function (req, res) {
+  let userData = req.body;
+  let result = suggestionsController.create(userData, "bob");
+  console.log(result);
+  // res.redirect(`/plants/${userData.plantId}`);
+  res.redirect(`/explore`);
+});
+
 router.get('/plants/:id', async function(req, res) {
   const plantId = req.params.id;
   try {
@@ -30,6 +39,9 @@ router.get('/plants/:id', async function(req, res) {
     if (!plant) {
       return res.status(404).send('Plant not found');
     }
+    let nickname = "bob"; //When nickname is implemented all occurances of bob should be replaced with the actual nickname
+    let wasPlantCreatedByUser = plant.nickname === nickname;
+    const suggestions = getSuggestions(wasPlantCreatedByUser, plantId, nickname);
 
     const plantName = plant.description;
     const resource = `http://dbpedia.org/resource/${plantName}`;
@@ -62,6 +74,8 @@ router.get('/plants/:id', async function(req, res) {
           if (bindings.length > 0) {
             res.render('plants', {
               title: 'Plant Page',
+              suggestions: suggestions,
+              wasPlantCreatedByUser: wasPlantCreatedByUser,
               plant: plant,
               dbp_title: bindings[0].label.value,
               dbp_comment: bindings[0].comment.value,
@@ -71,6 +85,8 @@ router.get('/plants/:id', async function(req, res) {
             // Render the page without DBpedia stuff
             res.render('plants', {
               title: 'Plant Page',
+              suggestions: suggestions,
+              wasPlantCreatedByUser: wasPlantCreatedByUser,
               plant: plant,
               dbp_title: '', // Provide empty values for DBpedia properties
               dbp_comment: '',
@@ -83,6 +99,8 @@ router.get('/plants/:id', async function(req, res) {
           // Render the page without DBpedia stuff
           res.render('plants', {
             title: 'Plant Page',
+            suggestions: suggestions,
+            wasPlantCreatedByUser: wasPlantCreatedByUser,
             plant: plant,
             dbp_title: '', // Provide empty values for DBpedia properties
             dbp_comment: '',
@@ -94,6 +112,19 @@ router.get('/plants/:id', async function(req, res) {
     res.status(500).send('Internal Server Error');
   }
 });
+
+async function getSuggestions(wasPlantCreatedByUser, plantId, nickname) {
+  //if its the owner return all suggestions
+  //if not the owner get for their nickname and plant and if its 2 or more then show suggested names and dont allow more?? idk
+  let suggestions;
+  if (wasPlantCreatedByUser) {
+    suggestions = await suggestionsController.getSuggestions(plantId);
+  } else {
+    suggestions = await suggestionsController.getSuggestions(plantId, nickname);
+  }
+
+  return suggestions;
+}
 
 // // Example usage:
 // const plantName = "Rose";

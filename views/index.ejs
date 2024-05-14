@@ -12,6 +12,11 @@
 <body>
     <h1><%= title %></h1>
     <div>
+        <form id="usernameForm" action="/submit" method="POST">
+            <label for="username">Enter your username:</label>
+            <input type="text" id="username" name="username" required>
+            <button type="submit">Submit</button>
+        </form>
         <a href="/explore">
             <button>Explore Page</button>
         </a>

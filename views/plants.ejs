@@ -15,176 +15,182 @@
 </head>
 <body onload="init('<%= plant.id %>', 'bob')" class="pt-0 px-0">
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="/explore">PlantPedia</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/explore">← Back</a>
-                    </li>
-                </ul>
-            </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="/explore">PlantPedia</a>
+        <div class="navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/explore">← Back</a>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <div class="row pt-5 px-5">
-        <div class="col-md-6">
-            <img src="/<%= plant.img %>" class="card-img-top cropped-image mb-3" alt="<%= plant.description %>">
-        </div>
+<div class="row pt-5 px-5">
+    <div class="col-md-6">
+        <img src="/<%= plant.img %>" class="card-img-top cropped-image mb-3" alt="<%= plant.description %>">
+    </div>
 
-        <div class="col-md-6">
-            <div class="d-flex align-items-center">
+    <div class="col-md-6">
+        <div class="d-flex align-items-center">
+            <% if (dbp_title) {%>
                 <h3 class="mr-3 mx-2"><%= dbp_title %></h3>
-                <p class="mb-0 text-light-emphasis">Identification:</p>
-                <% if (plant.enableSuggestions) {%>
-                    <p class="mb-0 text-warning mx-1 ">In Progress</p>
-                <%} else {%>
-                    <p class="mb-0 text-success mx-1 ">Approved</p>
-                <%}%>
-            </div>
-
-            <% if (!wasPlantCreatedByUser && plant.enableSuggestions) {%>
-                <a href="#" id="suggestLink" class="mx-3">Suggest an identification</a>
             <%}%>
+            <p class="mb-0 text-light-emphasis">Identification:</p>
+            <% if (plant.enableSuggestions) {%>
+                <p class="mb-0 text-warning mx-1 ">In Progress</p>
+            <%} else {%>
+                <p class="mb-0 text-success mx-1 ">Approved</p>
+            <%}%>
+        </div>
 
-            <div class="mx-3 my-2" id="suggestionsContainer" <% if (!wasPlantCreatedByUser) { %>style="display: none;"<% } %>>
-                <% if (wasPlantCreatedByUser && plant.enableSuggestions && suggestions.length !== 0) { %>
-                    <p>Suggestions:</p>
-                    <form action="/plants/updateName" method="POST">
-                        <input type="hidden" id="plantId" name="plantId" value="<%= plant.id %>">
-                        <% for (var i = 0; i < suggestions.length; i++) { %>
-                            <label for="<%= i %>"><%= suggestions[i].suggestedName %></label>
-                            <input type="radio" id="<%= i %>" name="suggestedName" value="<%= suggestions[i].suggestedName %>" required>
-                            <br>
-                            <br>
-                        <% } %>
-                        <button type="Submit" class="btn btn-primary">Submit</button>
-                    </form>
-                <% } else if (!wasPlantCreatedByUser && suggestions.length >= 2){ %>
-                    <p>Your Suggestions:</p>
+        <% if (!wasPlantCreatedByUser && plant.enableSuggestions) {%>
+            <a href="#" id="suggestLink" class="mx-3">Suggest an identification</a>
+        <%}%>
+
+        <div class="mx-3 my-2" id="suggestionsContainer" <% if (!wasPlantCreatedByUser) { %>style="display: none;"<% } %>>
+            <% if (wasPlantCreatedByUser && plant.enableSuggestions && suggestions.length !== 0) { %>
+                <p>Suggestions:</p>
+                <form action="/plants/updateName" method="POST">
+                    <input type="hidden" id="plantId" name="plantId" value="<%= plant.id %>">
                     <% for (var i = 0; i < suggestions.length; i++) { %>
-                        <p><%= suggestions[i].suggestedName %></p>
+                        <label for="<%= i %>"><%= suggestions[i].suggestedName %></label>
+                        <input type="radio" id="<%= i %>" name="suggestedName" value="<%= suggestions[i].suggestedName %>" required>
+                        <br>
+                        <br>
                     <% } %>
-                <% } else if (!wasPlantCreatedByUser && suggestions.length === 1){ %>
-                    <p>Your Suggestions:</p>
-                    <% for (var i = 0; i < suggestions.length; i++) { %>
-                        <p><%= suggestions[i].suggestedName %></p>
-                    <% } %>
-                    <form action="/plants/addSuggestion" method="POST">
-                        <input type="hidden" id="plantId" name="plantId" value="<%= plant.id %>">
-                        <label for="suggestedName">Suggestion:</label>
-                        <input type="text" id="suggestedName" name="suggestedName" required>
-                        <br>
-                        <br>
-                        <button type="Submit" class="btn btn-primary">Submit</button>
-                    </form>
-                <% } else if (!wasPlantCreatedByUser && suggestions.length === 0) { %>
-                    <form action="/plants/addSuggestion" method="POST">
-                        <input type="hidden" id="plantId" name="plantId" value="<%= plant.id %>">
-                        <label for="suggestedName">Suggestion:</label>
-                        <input type="text" id="suggestedName" name="suggestedName" required>
-                        <br>
-                        <br>
-                        <button type="Submit" class="btn btn-primary">Submit</button>
-                    </form>
+                    <button type="Submit" class="btn btn-primary">Submit</button>
+                </form>
+            <% } else if (!wasPlantCreatedByUser && suggestions.length >= 2){ %>
+                <p>Your Suggestions:</p>
+                <% for (var i = 0; i < suggestions.length; i++) { %>
+                    <p><%= suggestions[i].suggestedName %></p>
                 <% } %>
-            </div>
-
-
-            <p class="m-2"><%= dbp_comment %>...</p>
-            <% if (dbp_uri) { %>
-                <a class="btn btn-primary m-2" href="<%= dbp_uri %>">Learn more</a>
+            <% } else if (!wasPlantCreatedByUser && suggestions.length === 1){ %>
+                <p>Your Suggestions:</p>
+                <% for (var i = 0; i < suggestions.length; i++) { %>
+                    <p><%= suggestions[i].suggestedName %></p>
+                <% } %>
+                <form action="/plants/addSuggestion" method="POST">
+                    <input type="hidden" id="plantId" name="plantId" value="<%= plant.id %>">
+                    <label for="suggestedName">Suggestion:</label>
+                    <input type="text" id="suggestedName" name="suggestedName" required>
+                    <br>
+                    <br>
+                    <button type="Submit" class="btn btn-primary">Submit</button>
+                </form>
+            <% } else if (!wasPlantCreatedByUser && suggestions.length === 0) { %>
+                <form action="/plants/addSuggestion" method="POST">
+                    <input type="hidden" id="plantId" name="plantId" value="<%= plant.id %>">
+                    <label for="suggestedName">Suggestion:</label>
+                    <input type="text" id="suggestedName" name="suggestedName" required>
+                    <br>
+                    <br>
+                    <button type="Submit" class="btn btn-primary">Submit</button>
+                </form>
             <% } %>
+        </div>
+
+
+        <p class="m-2"><%= dbp_comment %>...</p>
+        <% if (dbp_uri) { %>
+            <div class="px-2 py-2">
+                <a class="cta" href="<%= dbp_uri %>" style="text-decoration: none;">
+                    <span>Learn more</span>
+                    <svg width="12px" height="8px" viewBox="0 0 13 10">
+                        <path d="M1,5 L11,5"></path>
+                        <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </a>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<div class="row pt-4 my-4 bg-custom-primary px-5">
+    <div class="col-md-6 px-4">
+        <% if (plant.date) { %>
+            <div class="d-flex align-items-center">
+                <p class="mr-3">Date seen:</p>
+                <p class="mx-2"><b><%= plant.date %></b></p>
+            </div>
+        <% } %>
+        <% if (plant.location) { %>
+            <div class="d-flex align-items-center">
+                <p class="mr-3">Location:</p>
+                <p class="mx-2"><b><%= plant.location %></b></p>
+            </div>
+        <% } %>
+        <!--            <% if (plant.name) { %>-->
+        <!--                <div class="d-flex align-items-center">-->
+        <!--                    <p class="mr-3">Name:</p>-->
+        <!--                    <p class="mx-2"><b><%= plant.name %></b></p>-->
+        <!--                </div>-->
+        <!--            <% } %>-->
+        <% if (plant.description) { %>
+            <div class="d-flex align-items-center">
+                <p class="mr-3">Description:</p>
+                <p class="mx-2"><b><%= plant.description %></b></p>
+            </div>
+        <% } %>
+        <% if (plant.size) { %>
+            <div class="d-flex align-items-center">
+                <p class="mr-3">Size:</p>
+                <p class="mx-2"><b><%= plant.size %></b></p>
+            </div>
+        <% } %>
+        <% if (plant.flowers || plant.leaves || plant.fruit) {%>
+            <p>Plant properties: </p>
+            <ul style="list-style-type: none;">
+                <li class="checkbox-container">
+                    <input type="checkbox" disabled <% if (plant.flowers) { %> checked <% } %>> Flowers
+                </li>
+                <li class="checkbox-container">
+                    <input type="checkbox" disabled <% if (plant.leaves) { %> checked <% } %>> Leaves
+                </li>
+                <li class="checkbox-container">
+                    <input type="checkbox" disabled <% if (plant.fruit) { %> checked <% } %>> Fruit
+                </li>
+            </ul>
+        <%}%>
+        <% if (plant.sunExposure) { %>
+            <div class="d-flex align-items-center">
+                <p class="mr-3">Sun exposure:</p>
+                <p class="mx-2"><b><%= plant.sunExposure %></b></p>
+            </div>
+        <% } %>
+        <% if (plant.flowerColour) { %>
+            <div class="d-flex align-items-center">
+                <p class="mr-3">Flower colour:</p>
+                <p class="mx-2"><b><%= plant.flowerColour %></b></p>
+            </div>
+        <% } %>
+        <% if (plant.nickname) { %>
+            <div class="d-flex align-items-center">
+                <p class="mr-3">Captured by:</p>
+                <p class="mx-2"><b><%= plant.nickname %></b></p>
+            </div>
+        <% } %>
+    </div>
+
+    <div class="col-md-6 mt-sm-5 mt-md-0 mx-sm-2 mx-md-0" style="display: flex; flex-direction: column-reverse;">
+        <div id="chat_interface" style="display: block;">
+            <div id="history" class="boxed" style="max-height: 350px; overflow-y: auto;"></div>
+            <div id="input" class="button boxed">
+                <form onsubmit="return false;" class="w-100 pt-2">
+                    <p>
+                        <label for="name">chat: </label>
+                        <input type="text" id="chat_input" name="chat_input" style="width: 80%;">
+                        <button id="chat_send" onclick="sendChatText()">Send</button>
+                    </p>
+                </form>
+            </div>
         </div>
     </div>
 
-    <div class="row pt-4 my-4 bg-custom-primary px-5">
-        <div class="col-md-6 px-4">
-            <% if (plant.date) { %>
-                <div class="d-flex align-items-center">
-                    <p class="mr-3">Date seen:</p>
-                    <p class="mx-2"><b><%= plant.date %></b></p>
-                </div>
-            <% } %>
-            <% if (plant.location) { %>
-                <div class="d-flex align-items-center">
-                    <p class="mr-3">Date seen:</p>
-                    <p class="mx-2"><b><%= plant.location %></b></p>
-                </div>
-            <% } %>
-<!--            <% if (plant.name) { %>-->
-<!--                <div class="d-flex align-items-center">-->
-<!--                    <p class="mr-3">Name:</p>-->
-<!--                    <p class="mx-2"><b><%= plant.name %></b></p>-->
-<!--                </div>-->
-<!--            <% } %>-->
-            <% if (plant.description) { %>
-                <div class="d-flex align-items-center">
-                    <p class="mr-3">Description:</p>
-                    <p class="mx-2"><b><%= plant.description %></b></p>
-                </div>
-            <% } %>
-            <% if (plant.size) { %>
-                <div class="d-flex align-items-center">
-                    <p class="mr-3">Size:</p>
-                    <p class="mx-2"><b><%= plant.size %></b></p>
-                </div>
-            <% } %>
-            <% if (plant.flowers || plant.leaves || plant.fruit) {%>
-                <p>Plant properties: </p>
-                <ul style="list-style-type: none;">
-                    <li class="checkbox-container">
-                        <input type="checkbox" disabled <% if (plant.flowers) { %> checked <% } %>> Flowers
-                    </li>
-                    <li class="checkbox-container">
-                        <input type="checkbox" disabled <% if (plant.leaves) { %> checked <% } %>> Leaves
-                    </li>
-                    <li class="checkbox-container">
-                        <input type="checkbox" disabled <% if (plant.fruit) { %> checked <% } %>> Fruit
-                    </li>
-                </ul>
-            <%}%>
-            <% if (plant.sunExposure) { %>
-                <div class="d-flex align-items-center">
-                    <p class="mr-3">Sun exposure:</p>
-                    <p class="mx-2"><b><%= plant.sunExposure %></b></p>
-                </div>
-            <% } %>
-            <% if (plant.flowerColour) { %>
-                <div class="d-flex align-items-center">
-                    <p class="mr-3">Flower colour:</p>
-                    <p class="mx-2"><b><%= plant.flowerColour %></b></p>
-                </div>
-            <% } %>
-            <% if (plant.nickname) { %>
-                <div class="d-flex align-items-center">
-                    <p class="mr-3">Captured by:</p>
-                    <p class="mx-2"><b><%= plant.nickname %></b></p>
-                </div>
-            <% } %>
-        </div>
-
-        <div class="col-md-6 mt-sm-5 mt-md-0 mx-sm-2 mx-md-0" style="display: flex; flex-direction: column-reverse;">
-            <div id="chat_interface" style="display: block;">
-                <div id="history" class="boxed" style="max-height: 350px; overflow-y: auto;"></div>
-                <div id="input" class="button boxed">
-                    <form onsubmit="return false;" class="w-100 pt-2">
-                        <p>
-                            <label for="name">chat: </label>
-                            <input type="text" id="chat_input" name="chat_input" style="width: 80%;">
-                            <button id="chat_send" onclick="sendChatText()">Send</button>
-                        </p>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-
-    </div>
+</div>
 
 
 
@@ -199,22 +205,22 @@
 </html>
 
 <script>
-    // JavaScript to toggle form visibility
-    var suggestLink = document.getElementById('suggestLink');
-    suggestLink?.addEventListener('click', function(event) {
-        event.preventDefault();
-        var suggestionsContainer = document.getElementById('suggestionsContainer');
-        suggestionsContainer.style.display = suggestionsContainer.style.display === 'none' ? 'block' : 'none';
-        suggestLink.style.display = 'none';
-    });
+  // JavaScript to toggle form visibility
+  var suggestLink = document.getElementById('suggestLink');
+  suggestLink?.addEventListener('click', function(event) {
+    event.preventDefault();
+    var suggestionsContainer = document.getElementById('suggestionsContainer');
+    suggestionsContainer.style.display = suggestionsContainer.style.display === 'none' ? 'block' : 'none';
+    suggestLink.style.display = 'none';
+  });
 
-    const historyElement = document.getElementById('history');
+  const historyElement = document.getElementById('history');
 
-    socket.on('chat', function(msg) {
-        scrollToBottom()
-    });
+  socket.on('chat', function(msg) {
+    scrollToBottom()
+  });
 
-    function scrollToBottom() {
-        historyElement.scrollTop = historyElement.scrollHeight;
-    }
+  function scrollToBottom() {
+    historyElement.scrollTop = historyElement.scrollHeight;
+  }
 </script>

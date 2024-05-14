@@ -5,7 +5,7 @@ let Schema = mongoose.Schema;
 let ChatSchema = new Schema({
     chatId: {type: String},
     message: {type: String},
-    user: {type: String}
+    userId: {type: String}
 });
 
 ChatSchema.set('toObject', {getters: true, virtuals: true});

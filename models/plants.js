@@ -17,7 +17,7 @@ let PlantSchema = new Schema({
     //TODO other options
     //TODO identification
     img: {type: String},
-    nickname: {type: String},
+    userId: {type: String},
 });
 
 PlantSchema.set('toObject', {getters: true, virtuals: true});

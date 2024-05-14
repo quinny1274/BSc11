@@ -4,7 +4,7 @@ exports.create = function (room, chatText, userId) {
     let chat = new chatModel({
         chatId: room,
         message: chatText,
-        user: userId
+        userId: userId
     });
 
     return chat.save().then(plant => {

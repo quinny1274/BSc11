@@ -26,9 +26,9 @@ router.get('/:id', async function(req, res) {
       return res.status(404).send('Plant not found');
     }
 
-    let nickname = "bob"; // When nickname is implemented all occurrences of bob should be replaced with the actual nickname
-    const wasPlantCreatedByUser = plant.nickname === nickname;
-    const suggestions = await getSuggestions(wasPlantCreatedByUser, plantId, nickname);
+    let userId = "bob"; // When nickname is implemented all occurrences of bob should be replaced with the actual nickname
+    const wasPlantCreatedByUser = plant.userId === userId;
+    const suggestions = await getSuggestions(wasPlantCreatedByUser, plantId, userId);
 
     // Fetch DBpedia data
     try {
@@ -58,14 +58,12 @@ router.get('/:id', async function(req, res) {
   }
 });
 
-async function getSuggestions(wasPlantCreatedByUser, plantId, nickname) {
-  //if its the owner return all suggestions
-  //if not the owner get for their nickname and plant and if its 2 or more then show suggested names and dont allow more?? idk
+async function getSuggestions(wasPlantCreatedByUser, plantId, userId) {
   let suggestions;
   if (wasPlantCreatedByUser) {
     suggestions = await suggestionsController.getSuggestions(plantId);
   } else {
-    suggestions = await suggestionsController.getSuggestionsForUser(plantId, nickname);
+    suggestions = await suggestionsController.getSuggestionsForUser(plantId, userId);
   }
 
   return suggestions;

@@ -1,10 +1,10 @@
 const suggestionsModel = require('../models/suggestions');
 
-exports.create = function (userData, nickname) {
+exports.create = function (userData, userId) {
     let suggestions = new suggestionsModel({
         plantId: userData.plantId,
         suggestedName: userData.suggestedName,
-        user: nickname
+        userId: userId
     });
 
     return suggestions.save().then(plant => {
@@ -50,8 +50,8 @@ exports.getSuggestions = function (plantId) {
         });
 };
 
-exports.getSuggestionsForUser = function (plantId, nickname) {
-    return suggestionsModel.find({ plantId: plantId, user: nickname })
+exports.getSuggestionsForUser = function (plantId, userId) {
+    return suggestionsModel.find({ plantId: plantId, userId: userId })
         .then(plant => {
             return plant;
         })

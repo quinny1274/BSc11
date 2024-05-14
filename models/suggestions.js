@@ -5,7 +5,7 @@ let Schema = mongoose.Schema;
 let SuggestionsSchema = new Schema({
     plantId: {type: String},
     suggestedName: {type: String},
-    user: {type: String}
+    userId: {type: String}
 });
 
 SuggestionsSchema.set('toObject', {getters: true, virtuals: true});

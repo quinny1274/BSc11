@@ -17,7 +17,7 @@ exports.init = function (io) {
             socket.on('history', async function (room) {
                 let chatList = await chats.getChats(room);
                 if (chatList) {
-                    chatList.forEach(chat => io.sockets.to(socket.id).emit('chat', room, chat.user, chat.message));
+                    chatList.forEach(chat => io.sockets.to(socket.id).emit('chat', room, chat.userId, chat.message));
                 }
             });
         } catch (e) {

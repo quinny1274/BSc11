@@ -18,10 +18,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
         <div class="container">
             <a class="navbar-brand" href="/explore">PlantPedia</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="/explore">← Back</a>
@@ -38,7 +35,9 @@
 
         <div class="col-md-6">
             <div class="d-flex align-items-center">
-                <h3 class="mr-3 mx-2"><%= dbp_title %></h3>
+                <% if (dbp_title) {%>
+                    <h3 class="mr-3 mx-2"><%= dbp_title %></h3>
+                <%}%>
                 <p class="mb-0 text-light-emphasis">Identification:</p>
                 <% if (plant.enableSuggestions) {%>
                     <p class="mb-0 text-warning mx-1 ">In Progress</p>
@@ -97,7 +96,15 @@
 
             <p class="m-2"><%= dbp_comment %>...</p>
             <% if (dbp_uri) { %>
-                <a class="btn btn-primary m-2" href="<%= dbp_uri %>">Learn more</a>
+                <div class="px-2 py-2">
+                    <a class="cta" href="<%= dbp_uri %>" style="text-decoration: none;">
+                        <span>Learn more</span>
+                        <svg width="12px" height="8px" viewBox="0 0 13 10">
+                            <path d="M1,5 L11,5"></path>
+                            <polyline points="8 1 12 5 8 9"></polyline>
+                        </svg>
+                    </a>
+                </div>
             <% } %>
         </div>
     </div>
@@ -112,7 +119,7 @@
             <% } %>
             <% if (plant.location) { %>
                 <div class="d-flex align-items-center">
-                    <p class="mr-3">Date seen:</p>
+                    <p class="mr-3">Location:</p>
                     <p class="mx-2"><b><%= plant.location %></b></p>
                 </div>
             <% } %>
@@ -182,7 +189,6 @@
                 </div>
             </div>
         </div>
-
 
     </div>
 

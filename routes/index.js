@@ -23,15 +23,26 @@ router.get('/display', function(req, res, next) {
   })
 });
 
-// // Example usage:
-// const plantName = "Rose";
-// queryDBpedia(plantName)
-//     .then(data => {
-//         console.log(data);
-//         // Process data here
-//     })
-//     .catch(error => {
-//         console.error(error);
-//     });
+router.get('/explore/sort/date_time', function(req, res, next) {
+  let result = plants.getAll({date: -1})
+
+  console.log("Sort date time");
+
+  result.then(plants => {
+    let data = JSON.parse(plants);
+    res.render('explore', { title: 'Explore', data: data });
+  })
+});
+
+router.get('/explore/sort/identification', function(req, res, next) {
+  let result = plants.getAll({name: 1}) // TODO: add additional enableUserSuggestions filter
+
+  console.log("Sort date time");
+
+  result.then(plants => {
+    let data = JSON.parse(plants);
+    res.render('explore', { title: 'Explore', data: data });
+  })
+});
 
 module.exports = router;

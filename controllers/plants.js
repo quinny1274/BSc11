@@ -30,12 +30,18 @@ exports.create = function (userData, filePath, nickname) {
     });
 };
 
-exports.getAll = function () {
-    return plantModel.find({}).then(plant => {
-        return JSON.stringify(plant);
+exports.getAll = function (sortBy = null) {
+    let query = plantModel.find({});
+
+    // If sortBy, sort results
+    if (sortBy) {
+        query = query.sort(sortBy);
+    }
+
+    return query.then(plants => {
+        return JSON.stringify(plants);
     }).catch(err => {
         console.log(err);
-
         return null;
     });
 };
@@ -50,6 +56,7 @@ exports.getPlant = function (plantId) {
             return null;
         });
 };
+
 
 exports.updateName = function (userData) {
     return plantModel.findByIdAndUpdate(userData.plantId, { name: userData.suggestedName, enableSuggestions: false }, { new: true })
@@ -67,3 +74,58 @@ exports.updateName = function (userData) {
           return null;
       });
 };
+
+exports.fetchDBpediaData = async function(plantName) {
+    const fetcher = new SparqlEndpointFetcher();
+    const resource = `http://dbpedia.org/resource/${plantName}`;
+
+    // Build query
+    const sparqlQuery = `
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX dbo: <http://dbpedia.org/ontology/>
+        SELECT ?uri ?label ?comment
+        WHERE {
+            ?uri rdfs:label ?label .
+            ?uri rdfs:comment ?comment .
+            FILTER (langMatches(lang(?label), "en")) .
+            FILTER (langMatches(lang(?comment), "en")) .
+            FILTER (?uri = <${resource}>)
+        }
+        `;
+
+    try {
+        // Fetch bindings
+        const bindingsStream = await fetcher.fetchBindings('https://dbpedia.org/sparql', sparqlQuery);
+
+        // Process bindings
+        const bindings = await new Promise((resolve, reject) => {
+            const result = [];
+            bindingsStream.on('data', bindings => result.push(bindings));
+            bindingsStream.on('end', () => resolve(result));
+            bindingsStream.on('error', reject);
+        });
+
+        // Data found
+        if (bindings.length > 0) {
+            return {
+                dbp_title: bindings[0].label.value,
+                dbp_comment: bindings[0].comment.value,
+                dbp_uri: bindings[0].uri.value
+            };
+        } else {
+            // No data found from query, return empty strings
+            return {
+                dbp_title: "",
+                dbp_comment: "",
+                dbp_uri: ""
+            };
+        }
+    } catch (error) {
+        // DBPedia query failed, return empty strings
+        return {
+            dbp_title: "",
+            dbp_comment: "",
+            dbp_uri: ""
+        };
+    }
+}

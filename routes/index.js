@@ -49,7 +49,7 @@ router.get('/plants/:id', async function(req, res) {
     let wasPlantCreatedByUser = plant.nickname === nickname;
     const suggestions = await getSuggestions(wasPlantCreatedByUser, plantId, nickname);
 
-    const plantName = plant.description;
+    const plantName = plant.name;
     const resource = `http://dbpedia.org/resource/${plantName}`;
     const endpointUrl = 'https://dbpedia.org/sparql';
     const sparqlQuery = `

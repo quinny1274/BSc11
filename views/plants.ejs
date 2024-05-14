@@ -27,34 +27,84 @@
             <div class="d-flex align-items-center">
                 <h3 class="mr-3 mx-2"><%= dbp_title %></h3>
                 <p class="mb-0 text-light-emphasis">Identification:</p>
-                <p class="mb-0 text-success mx-1 ">Approved</p>
+                <% if (plant.enableSuggestions) {%>
+                    <p class="mb-0 text-warning mx-1 ">In Progress</p>
+                <%} else {%>
+                    <p class="mb-0 text-success mx-1 ">Approved</p>
+                <%}%>
             </div>
 
-            <a href="" class="mx-2 my-2">Suggest an identification</a>
+            <% if (!wasPlantCreatedByUser && plant.enableSuggestions) {%>
+                <a href="#" id="suggestLink" class="mx-3">Suggest an identification</a>
+            <%}%>
 
-            <p class="mx-2"><%= dbp_comment %></p>
+            <div class="mx-3 my-2" id="suggestionsContainer" <% if (!wasPlantCreatedByUser) { %>style="display: none;"<% } %>>
+                <% if (wasPlantCreatedByUser && plant.enableSuggestions && suggestions.length !== 0) { %>
+                    <p>Suggestions:</p>
+                    <form action="/plants/updateName" method="POST">
+                        <input type="hidden" id="plantId" name="plantId" value="<%= plant.id %>">
+                        <% for (var i = 0; i < suggestions.length; i++) { %>
+                            <label for="<%= i %>"><%= suggestions[i].suggestedName %></label>
+                            <input type="radio" id="<%= i %>" name="suggestedName" value="<%= suggestions[i].suggestedName %>" required>
+                            <br>
+                            <br>
+                        <% } %>
+                        <button type="Submit" class="btn btn-primary">Submit</button>
+                    </form>
+                <% } else if (!wasPlantCreatedByUser && suggestions.length >= 2){ %>
+                    <p>Your Suggestions:</p>
+                    <% for (var i = 0; i < suggestions.length; i++) { %>
+                        <p><%= suggestions[i].suggestedName %></p>
+                    <% } %>
+                <% } else if (!wasPlantCreatedByUser && suggestions.length === 1){ %>
+                    <p>Your Suggestions:</p>
+                    <% for (var i = 0; i < suggestions.length; i++) { %>
+                        <p><%= suggestions[i].suggestedName %></p>
+                    <% } %>
+                    <form action="/plants/addSuggestion" method="POST">
+                        <input type="hidden" id="plantId" name="plantId" value="<%= plant.id %>">
+                        <label for="suggestedName">Suggestion:</label>
+                        <input type="text" id="suggestedName" name="suggestedName" required>
+                        <br>
+                        <br>
+                        <button type="Submit" class="btn btn-primary">Submit</button>
+                    </form>
+                <% } else if (!wasPlantCreatedByUser && suggestions.length === 0) { %>
+                    <form action="/plants/addSuggestion" method="POST">
+                        <input type="hidden" id="plantId" name="plantId" value="<%= plant.id %>">
+                        <label for="suggestedName">Suggestion:</label>
+                        <input type="text" id="suggestedName" name="suggestedName" required>
+                        <br>
+                        <br>
+                        <button type="Submit" class="btn btn-primary">Submit</button>
+                    </form>
+                <% } %>
+            </div>
+
+
+            <p class="m-2"><%= dbp_comment %>...</p>
             <% if (dbp_uri) { %>
-                <a class="btn btn-primary mx-2" href="<%= dbp_uri %>">Learn more</a>
+                <a class="btn btn-primary m-2" href="<%= dbp_uri %>">Learn more</a>
             <% } %>
         </div>
     </div>
 
-    <div class="row pt-5">
-        <div class="col-md-6">
+    <div class="row pt-4 my-4 bg-custom-primary">
+        <div class="col-md-6 px-4">
             <div class="d-flex align-items-center">
-                <p class="mr-3 text-light-emphasis">Name:</p>
+                <p class="mr-3">Name:</p>
                 <p class="mx-2"><b><%= plant.name %></b></p>
             </div>
             <div class="d-flex align-items-center">
-                <p class="mr-3 text-light-emphasis">Description:</p>
+                <p class="mr-3">Description:</p>
                 <p class="mx-2"><b><%= plant.description %></b></p>
             </div>
             <div class="d-flex align-items-center">
-                <p class="mr-3 text-light-emphasis">Date:</p>
+                <p class="mr-3">Date:</p>
                 <p class="mx-2"><b><%= plant.date %></b></p>
             </div>
             <div class="d-flex align-items-center">
-                <p class="mr-3 text-light-emphasis">Size:</p>
+                <p class="mr-3">Size:</p>
                 <p class="mx-2"><b><%= plant.size %></b></p>
             </div>
         </div>
@@ -84,45 +134,16 @@
 <!--            class="w-100" height="400" allowfullscreen="" loading="lazy"></iframe>-->
 <!--    </div>-->
 
-    <% if (wasPlantCreatedByUser && plant.enableSuggestions && suggestions.length !== 0) { %>
-        <p>Suggestions:</p>
-        <form action="/plants/updateName" method="POST">
-            <input type="hidden" id="plantId" name="plantId" value="<%= plant.id %>">
-            <% for (var i = 0; i < suggestions.length; i++) { %>
-                <label for="<%= i %>"><%= suggestions[i].suggestedName %></label>
-                <input type="radio" id="<%= i %>" name="suggestedName" value="<%= suggestions[i].suggestedName %>" required>
-                <br>
-                <br>
-            <% } %>
-            <button type="Submit">Submit</button>
-        </form>
-    <% } else if (!wasPlantCreatedByUser && suggestions.length >= 2){ %>
-        <p>Your Suggestions:</p>
-        <% for (var i = 0; i < suggestions.length; i++) { %>
-            <p><%= suggestions[i].suggestedName %></p>
-        <% } %>
-    <% } else if (!wasPlantCreatedByUser && suggestions.length === 1){ %>
-        <p>Your Suggestions:</p>
-        <% for (var i = 0; i < suggestions.length; i++) { %>
-            <p><%= suggestions[i].suggestedName %></p>
-        <% } %>
-        <form action="/plants/addSuggestion" method="POST">
-            <input type="hidden" id="plantId" name="plantId" value="<%= plant.id %>">
-            <label for="suggestedName">Suggestion:</label>
-            <input type="text" id="suggestedName" name="suggestedName" required>
-            <br>
-            <br>
-            <button type="Submit">Submit</button>
-        </form>
-    <% } else if (!wasPlantCreatedByUser && suggestions.length === 0) { %>
-        <form action="/plants/addSuggestion" method="POST">
-            <input type="hidden" id="plantId" name="plantId" value="<%= plant.id %>">
-            <label for="suggestedName">Suggestion:</label>
-            <input type="text" id="suggestedName" name="suggestedName" required>
-            <br>
-            <br>
-            <button type="Submit">Submit</button>
-        </form>
-    <% } %>
 </body>
 </html>
+
+<script>
+    // JavaScript to toggle form visibility
+    var suggestLink = document.getElementById('suggestLink');
+    suggestLink.addEventListener('click', function(event) {
+        event.preventDefault();
+        var suggestionsContainer = document.getElementById('suggestionsContainer');
+        suggestionsContainer.style.display = suggestionsContainer.style.display === 'none' ? 'block' : 'none';
+        suggestLink.style.display = 'none';
+    });
+</script>

@@ -36,6 +36,11 @@ a {
   color: white;
 }
 
+.bg-custom-primary {
+  background-color: #2c4a27;
+  color: white;
+}
+
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:active,

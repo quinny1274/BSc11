@@ -1,16 +1,16 @@
 const chatModel = require('../models/chats');
 
-exports.create = function (room, chatText, userId) {
+exports.create = function (plantId, message, userId) {
     let chat = new chatModel({
-        chatId: room,
-        message: chatText,
+        plantId: plantId,
+        message: message,
         userId: userId
     });
 
-    return chat.save().then(plant => {
-        console.log(plant);
+    return chat.save().then(chat => {
+        console.log(chat);
 
-        return JSON.stringify(plant);
+        return JSON.stringify(chat);
     }).catch(err => {
         console.log(err);
 
@@ -19,8 +19,8 @@ exports.create = function (room, chatText, userId) {
 };
 
 exports.getAll = function () {
-    return chatModel.find({}).then(plant => {
-        return JSON.stringify(plant);
+    return chatModel.find({}).then(chat => {
+        return JSON.stringify(chat);
     }).catch(err => {
         console.log(err);
 
@@ -28,10 +28,10 @@ exports.getAll = function () {
     });
 };
 
-exports.getChat = function (chatId) {
-    return chatModel.findById(chatId)
-        .then(plant => {
-            return plant;
+exports.getChat = function (plantId) {
+    return chatModel.findById(plantId)
+        .then(chat => {
+            return chat;
         })
         .catch(err => {
             console.error('Error fetching chat:', err);
@@ -39,10 +39,10 @@ exports.getChat = function (chatId) {
         });
 };
 
-exports.getChats = function (chatId) {
-    return chatModel.find({ chatId: chatId })
-        .then(plant => {
-            return plant;
+exports.getChats = function (plantId) {
+    return chatModel.find({ plantId: plantId })
+        .then(chat => {
+            return chat;
         })
         .catch(err => {
             console.error('Error fetching chat:', err);

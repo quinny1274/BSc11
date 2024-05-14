@@ -3,7 +3,7 @@ let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
 let ChatSchema = new Schema({
-    chatId: {type: String},
+    plantId: {type: String},
     message: {type: String},
     userId: {type: String}
 });

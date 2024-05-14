@@ -3,21 +3,21 @@ const chats = require("../controllers/chats");
 exports.init = function (io) {
     io.sockets.on('connection', function (socket) {
         try {
-            socket.on('join', function (room, userId) {
-                socket.join(room);
-                io.sockets.to(room).emit('joined', room, userId);
+            socket.on('join', function (plantId, userId) {
+                socket.join(plantId);
+                io.sockets.to(plantId).emit('joined', plantId, userId);
             });
-            socket.on('chat', function (room, userId, chatText) {
-                io.sockets.to(room).emit('chat', room, userId, chatText);
-                chats.create(room, chatText, userId);
+            socket.on('chat', function (plantId, userId, message) {
+                io.sockets.to(plantId).emit('chat', plantId, userId, message);
+                chats.create(plantId, message, userId);
             });
             socket.on('disconect', function () {
                 console.log('someone disconnected');
             });
-            socket.on('history', async function (room) {
-                let chatList = await chats.getChats(room);
+            socket.on('history', async function (plantId) {
+                let chatList = await chats.getChats(plantId);
                 if (chatList) {
-                    chatList.forEach(chat => io.sockets.to(socket.id).emit('chat', room, chat.userId, chat.message));
+                    chatList.forEach(chat => io.sockets.to(socket.id).emit('chat', plantId, chat.userId, chat.message));
                 }
             });
         } catch (e) {

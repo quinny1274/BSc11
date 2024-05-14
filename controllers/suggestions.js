@@ -1,16 +1,16 @@
 const suggestionsModel = require('../models/suggestions');
 
 exports.create = function (userData, userId) {
-    let suggestions = new suggestionsModel({
+    let suggestion = new suggestionsModel({
         plantId: userData.plantId,
         suggestedName: userData.suggestedName,
         userId: userId
     });
 
-    return suggestions.save().then(plant => {
-        console.log(plant);
+    return suggestion.save().then(suggestion => {
+        console.log(suggestion);
 
-        return JSON.stringify(plant);
+        return JSON.stringify(suggestion);
     }).catch(err => {
         console.log(err);
 
@@ -19,8 +19,8 @@ exports.create = function (userData, userId) {
 };
 
 exports.getAll = function () {
-    return suggestionsModel.find({}).then(plant => {
-        return JSON.stringify(plant);
+    return suggestionsModel.find({}).then(suggestion => {
+        return JSON.stringify(suggestion);
     }).catch(err => {
         console.log(err);
 
@@ -30,8 +30,8 @@ exports.getAll = function () {
 
 exports.getSuggestion = function (plantId) {
     return suggestionsModel.findById(plantId)
-        .then(plant => {
-            return plant;
+        .then(suggestion => {
+            return suggestion;
         })
         .catch(err => {
             console.error('Error fetching suggestion:', err);
@@ -41,8 +41,8 @@ exports.getSuggestion = function (plantId) {
 
 exports.getSuggestions = function (plantId) {
     return suggestionsModel.find({ plantId: plantId })
-        .then(plant => {
-            return plant;
+        .then(suggestion => {
+            return suggestion;
         })
         .catch(err => {
             console.error('Error fetching suggestion:', err);
@@ -52,8 +52,8 @@ exports.getSuggestions = function (plantId) {
 
 exports.getSuggestionsForUser = function (plantId, userId) {
     return suggestionsModel.find({ plantId: plantId, userId: userId })
-        .then(plant => {
-            return plant;
+        .then(suggestion => {
+            return suggestion;
         })
         .catch(err => {
             console.error('Error fetching suggestion:', err);

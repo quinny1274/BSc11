@@ -1,35 +1,35 @@
-let name = null;
-let roomNo = null;
+let globalUserId = null;
+let globalPlantId = null;
 let socket = io();
 
 function init(plantId, userId) {
-    socket.on('joined', function (room, userId) {
-        if (userId === name) {
+    socket.on('joined', function (plantId, userId) {
+        if (userId === globalUserId) {
         } else {
-            writeOnHistory('<b>' + userId + '</b>' + 'joined room' + room)
+            writeOnHistory('<b>' + userId + '</b>' + 'joined room' + plantId)
         }
     });
-    socket.on('chat', function (room, userId, chatText) {
+    socket.on('chat', function (plantId, userId, chatText) {
         let who = userId
-        if (userId === name) {
+        if (userId === globalUserId) {
             who = 'Me';
         }
         writeOnHistory('<b>' + who + ':</b> ' + chatText)
     })
-    connectToRoomUUID(plantId, userId)
-    socket.emit('history', roomNo);
+    connectToPlantChat(plantId, userId)
+    socket.emit('history', globalUserId);
 }
 
 function sendChatText() {
     let chatText = document.getElementById('chat_input').value;
-    console.log('chat', roomNo, name, chatText)
-    socket.emit('chat', roomNo, name, chatText);
+    console.log('chat', globalPlantId, globalUserId, chatText)
+    socket.emit('chat', globalPlantId, globalUserId, chatText);
 }
 
-function connectToRoomUUID(plantId, userId) {
-    roomNo = plantId;
-    name = userId;
-    socket.emit('join', roomNo, name);
+function connectToPlantChat(plantId, userId) {
+    globalPlantId = plantId;
+    globalUserId = userId;
+    socket.emit('join', plantId, userId);
 }
 
 function writeOnHistory(text) {

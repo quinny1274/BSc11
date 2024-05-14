@@ -9,24 +9,8 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 </head>
-<body onload="init()">
+<body>
     <h1><%= title %></h1>
-    <div id="initial_form" style="display: block">
-        <p>Please insert the id of the room you want to join, if you dp not have a room id, click Generate Room</p>
-        <form onsubmit="return false;">
-            <p>
-                <label for="name">Your name</label>
-                <input type="text" id="name" name="name">
-            </p>
-            <p>
-                <label for="roomNo">Your room</label>
-                <input type="text" id="roomNo" name="roomNo">
-                <button id="roomNoGenerator" onclick="generateRoom()">Generate Room</button>
-            </p>
-            <button id="connect" onclick="connectToRoom()">Connect</button>
-        </form>
-    </div>
-
     <div>
         <a href="/explore">
             <button>Explore Page</button>

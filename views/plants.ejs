@@ -13,12 +13,25 @@
 
     <title>Plant Page</title>
 </head>
-<body onload="init('<%= plant.id %>', 'bob')">
-    <a href="/explore">
-        <button class="btn btn-secondary">← Back</button>
-    </a>
+<body onload="init('<%= plant.id %>', 'bob')" class="pt-0 px-0">
 
-    <div class="row pt-5">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/explore">PlantPedia</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/explore">← Back</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="row pt-5 px-5">
         <div class="col-md-6">
             <img src="/<%= plant.img %>" class="card-img-top cropped-image mb-3" alt="<%= plant.description %>">
         </div>
@@ -89,40 +102,88 @@
         </div>
     </div>
 
-    <div class="row pt-4 my-4 bg-custom-primary">
+    <div class="row pt-4 my-4 bg-custom-primary px-5">
         <div class="col-md-6 px-4">
-            <div class="d-flex align-items-center">
-                <p class="mr-3">Name:</p>
-                <p class="mx-2"><b><%= plant.name %></b></p>
-            </div>
-            <div class="d-flex align-items-center">
-                <p class="mr-3">Description:</p>
-                <p class="mx-2"><b><%= plant.description %></b></p>
-            </div>
-            <div class="d-flex align-items-center">
-                <p class="mr-3">Date:</p>
-                <p class="mx-2"><b><%= plant.date %></b></p>
-            </div>
-            <div class="d-flex align-items-center">
-                <p class="mr-3">Size:</p>
-                <p class="mx-2"><b><%= plant.size %></b></p>
-            </div>
+            <% if (plant.date) { %>
+                <div class="d-flex align-items-center">
+                    <p class="mr-3">Date seen:</p>
+                    <p class="mx-2"><b><%= plant.date %></b></p>
+                </div>
+            <% } %>
+            <% if (plant.location) { %>
+                <div class="d-flex align-items-center">
+                    <p class="mr-3">Date seen:</p>
+                    <p class="mx-2"><b><%= plant.location %></b></p>
+                </div>
+            <% } %>
+<!--            <% if (plant.name) { %>-->
+<!--                <div class="d-flex align-items-center">-->
+<!--                    <p class="mr-3">Name:</p>-->
+<!--                    <p class="mx-2"><b><%= plant.name %></b></p>-->
+<!--                </div>-->
+<!--            <% } %>-->
+            <% if (plant.description) { %>
+                <div class="d-flex align-items-center">
+                    <p class="mr-3">Description:</p>
+                    <p class="mx-2"><b><%= plant.description %></b></p>
+                </div>
+            <% } %>
+            <% if (plant.size) { %>
+                <div class="d-flex align-items-center">
+                    <p class="mr-3">Size:</p>
+                    <p class="mx-2"><b><%= plant.size %></b></p>
+                </div>
+            <% } %>
+            <% if (plant.flowers || plant.leaves || plant.fruit) {%>
+                <p>Plant properties: </p>
+                <ul style="list-style-type: none;">
+                    <li class="checkbox-container">
+                        <input type="checkbox" disabled <% if (plant.flowers) { %> checked <% } %>> Flowers
+                    </li>
+                    <li class="checkbox-container">
+                        <input type="checkbox" disabled <% if (plant.leaves) { %> checked <% } %>> Leaves
+                    </li>
+                    <li class="checkbox-container">
+                        <input type="checkbox" disabled <% if (plant.fruit) { %> checked <% } %>> Fruit
+                    </li>
+                </ul>
+            <%}%>
+            <% if (plant.sunExposure) { %>
+                <div class="d-flex align-items-center">
+                    <p class="mr-3">Sun exposure:</p>
+                    <p class="mx-2"><b><%= plant.sunExposure %></b></p>
+                </div>
+            <% } %>
+            <% if (plant.flowerColour) { %>
+                <div class="d-flex align-items-center">
+                    <p class="mr-3">Flower colour:</p>
+                    <p class="mx-2"><b><%= plant.flowerColour %></b></p>
+                </div>
+            <% } %>
+            <% if (plant.nickname) { %>
+                <div class="d-flex align-items-center">
+                    <p class="mr-3">Captured by:</p>
+                    <p class="mx-2"><b><%= plant.nickname %></b></p>
+                </div>
+            <% } %>
         </div>
 
-        <div class="col-md-6">
-            <div id="chat_interface" style="display: block">
-                <div id="history" class="boxed"></div>
+        <div class="col-md-6 mt-sm-5 mt-md-0 mx-sm-2 mx-md-0" style="display: flex; flex-direction: column-reverse;">
+            <div id="chat_interface" style="display: block;">
+                <div id="history" class="boxed" style="max-height: 350px; overflow-y: auto;"></div>
                 <div id="input" class="button boxed">
-                    <form onsubmit="return false;" style="width: 100%">
+                    <form onsubmit="return false;" class="w-100 pt-2">
                         <p>
                             <label for="name">chat: </label>
-                            <input type="text" id="chat_input" name="chat_input" style="width: 80%">
+                            <input type="text" id="chat_input" name="chat_input" style="width: 80%;">
                             <button id="chat_send" onclick="sendChatText()">Send</button>
                         </p>
                     </form>
                 </div>
             </div>
         </div>
+
+
     </div>
 
 
@@ -140,10 +201,20 @@
 <script>
     // JavaScript to toggle form visibility
     var suggestLink = document.getElementById('suggestLink');
-    suggestLink.addEventListener('click', function(event) {
+    suggestLink?.addEventListener('click', function(event) {
         event.preventDefault();
         var suggestionsContainer = document.getElementById('suggestionsContainer');
         suggestionsContainer.style.display = suggestionsContainer.style.display === 'none' ? 'block' : 'none';
         suggestLink.style.display = 'none';
     });
+
+    const historyElement = document.getElementById('history');
+
+    socket.on('chat', function(msg) {
+        scrollToBottom()
+    });
+
+    function scrollToBottom() {
+        historyElement.scrollTop = historyElement.scrollHeight;
+    }
 </script>

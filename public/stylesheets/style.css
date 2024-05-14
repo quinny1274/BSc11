@@ -49,3 +49,13 @@ a {
   background-color: #1e321a;
   color: white;
 }
+
+#chat_interface {
+  flex-grow: 1;
+  overflow-y: auto; /* Enable vertical scrollbar if needed */
+}
+
+.checkbox-container {
+  pointer-events: none; /* Disable mouse events */
+  opacity: 1; /* Make it fully opaque */
+}

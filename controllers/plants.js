@@ -129,3 +129,60 @@ exports.fetchDBpediaData = async function(plantName) {
         };
     }
 }
+
+exports.fetchDBpediaSuggestions = async function(plantName) {
+    const fetcher = new SparqlEndpointFetcher();
+    const resource = `http://dbpedia.org/resource/${plantName}`;
+
+    // Build query
+    const sparqlQuery = `
+        PREFIX dbo: <http://dbpedia.org/ontology/>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        SELECT ?uri ?label ?abstract
+        WHERE {
+            {
+                BIND(IRI(CONCAT("http://dbpedia.org/resource/", "${plantName}")) AS ?uri)
+                ?uri rdfs:label ?label ;
+                    dbo:abstract ?abstract .
+                   
+                FILTER(langMatches(lang(?label), "EN"))
+                FILTER(langMatches(lang(?abstract), "EN"))
+            }
+            UNION
+            {
+                ?uri a dbo:Plant ;
+                    rdfs:label ?label ;
+                    dbo:abstract ?abstract .
+                FILTER(REGEX(?label, "${plantName}", "i"))
+                FILTER(langMatches(lang(?label), "EN"))
+                FILTER(langMatches(lang(?abstract), "EN"))
+                FILTER(?uri != IRI(CONCAT("http://dbpedia.org/resource/", "${plantName}")))
+            }
+        }
+        LIMIT 10
+    `;
+
+    try {
+        // Fetch bindings
+        const bindingsStream = await fetcher.fetchBindings('https://dbpedia.org/sparql', sparqlQuery);
+
+        // Process bindings
+        const bindings = await new Promise((resolve, reject) => {
+            const result = [];
+            bindingsStream.on('data', bindings => result.push(bindings));
+            bindingsStream.on('end', () => resolve(result));
+            bindingsStream.on('error', reject);
+        });
+
+        // Data found
+        let labels = [];
+        if (bindings.length > 0) {
+            for (let i = 0; i < bindings.length; i++) {
+                labels[i] = bindings[i].label.value;
+            }
+        }
+        return labels;
+    } catch (error) { // Error fetching DBpedia
+        console.log(error);
+    }
+}

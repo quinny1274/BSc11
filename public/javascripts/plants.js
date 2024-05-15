@@ -17,7 +17,7 @@ function init(plantId, userId) {
         writeOnHistory('<b>' + who + ':</b> ' + chatText)
     })
     connectToPlantChat(plantId, userId)
-    socket.emit('history', globalUserId);
+    socket.emit('history', globalPlantId);
 }
 
 function sendChatText() {

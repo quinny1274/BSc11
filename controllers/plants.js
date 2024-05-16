@@ -2,6 +2,8 @@ const plantModel = require('../models/plants');
 const { SparqlEndpointFetcher } = require("fetch-sparql-endpoint");
 
 exports.create = function (userData, filePath, userId) {
+    const imageFile = userData.img;  // Assuming formData is a FormData object
+    const imageBuffer = fs.readFileSync(imageFile.path);
     let plant = new plantModel({
         name: userData.name,
         enableSuggestions: userData.enableSuggestions === 'on',
@@ -14,7 +16,7 @@ exports.create = function (userData, filePath, userId) {
         fruit: userData.fruit === 'on',
         sunExposure: userData.sunExposure,
         flowerColour: userData.flowerColour,
-        img: filePath,
+        img: imageBuffer,
         userId: userId,
         chat: "w"
     });

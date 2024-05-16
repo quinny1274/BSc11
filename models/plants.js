@@ -16,7 +16,7 @@ let PlantSchema = new Schema({
     flowerColour: {type: String},
     //TODO other options
     //TODO identification
-    img: {type: String},
+    img: {type: Buffer},
     userId: {type: String},
 });
 

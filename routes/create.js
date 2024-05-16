@@ -42,4 +42,18 @@ router.post('/add', function(req, res, next) {
     });
 });
 
+// router.post('/add', upload.single('myImage'), function(req, res, next) {
+//     let userData = req.body;
+//     console.log("fuck####################################################################");
+//     let filePath = req.file.path;
+//     console.log("filepath", filePath);
+//     plants.create(userData, filePath, "bob").then(plant => {
+//         console.log(plant);
+//         res.status(200).send(plant);
+//     }).catch(err => {
+//         console.log(err);
+//         res.status(500).send(err);
+//     });
+// });
+
 module.exports = router;

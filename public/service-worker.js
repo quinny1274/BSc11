@@ -91,9 +91,15 @@ self.addEventListener('sync', event => {
           formData.append("fruit", syncPlant.fruit);
           formData.append("sunExposure", syncPlant.sunExposure);
           formData.append("flowerColour", syncPlant.flowerColour);
-          formData.append("img", syncPlant.img);
+          // formData.append("img", syncPlant.img);
+
+          console.log("fuck####################################################################");
+          // console.log('myImage', localStorage.getItem('myImage'));
+          formData.append("img", syncPlant.myImage);
           formData.append("userId", syncPlant.userId);
           formData.append("chat", syncPlant.chat);
+
+
 
 
           // Fetch with FormData instead of JSON
@@ -102,6 +108,7 @@ self.addEventListener('sync', event => {
             body: formData,
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
+              // 'Content-Type': 'multipart/form-data',
             },
           }).then(() => {
             console.log('Service Worker: Syncing new Plant: ', syncPlant, ' done');

@@ -9,6 +9,14 @@ const addNewPlantToSync = (syncPlantIndexDB, formData) => {
     console.log("Sync add");
     const transaction = syncPlantIndexDB.transaction([syncPlantsIndexDBName], "readwrite")
     const plantStore = transaction.objectStore(syncPlantsIndexDBName)
+    console.log("FDAUYBFIUYWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+    const imageFile = formData.get("myImage");
+
+    // Convert the image file to a Blob
+    // const reader = new FileReader();
+    // reader.readAsArrayBuffer(imageFile);
+    // const blob = new Blob([reader.result], {type: imageFile.type});
+    console.log("gesssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
     const addRequest = plantStore.add({
       name: formData.get("name"),
       enableSuggestions: formData.get("enableSuggestions") === 'on',
@@ -21,10 +29,11 @@ const addNewPlantToSync = (syncPlantIndexDB, formData) => {
       fruit: formData.get("fruit") === 'on',
       sunExposure: formData.get("sunExposure"),
       flowerColour: formData.get("flowerColour"),
-      img: "filePath",
+      img: imageFile,
       userId: "bob",
       chat: "w"
     })
+    console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
     addRequest.addEventListener("success", () => {
       console.log("Added " + "#" + addRequest.result + ": " + formData)
       const getRequest = plantStore.get(addRequest.result)

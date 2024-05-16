@@ -78,7 +78,8 @@ exports.updateName = function (userData) {
 
 exports.fetchDBpediaData = async function(plantName) {
     const fetcher = new SparqlEndpointFetcher();
-    const resource = `http://dbpedia.org/resource/${plantName}`;
+    const modifiedPlantName = plantName.replace(/\s/g, '_');
+    const resource = `http://dbpedia.org/resource/${modifiedPlantName}`;
 
     // Build query
     const sparqlQuery = `
@@ -133,7 +134,7 @@ exports.fetchDBpediaData = async function(plantName) {
 
 exports.fetchDBpediaSuggestions = async function(plantName) {
     const fetcher = new SparqlEndpointFetcher();
-    const resource = `http://dbpedia.org/resource/${plantName}`;
+    const modifiedPlantName = plantName.replace(/\s/g, '_');
 
     // Build query
     const sparqlQuery = `

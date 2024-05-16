@@ -13,8 +13,8 @@
 <body>
     <h1><%= title %></h1>
     <div>
-<!--        <form action="/create/add" method="POST" enctype="multipart/form-data">-->
-        <form id="createPlantForm">
+<!--        <form id="createPlantForm" action="/explore" method="GET">-->
+        <form id="createPlantForm" action="/explore">
             <label for="name">Name (Leave blank if unknown):</label>
             <input type="text" id="name" name="name">
             <br>
@@ -74,8 +74,7 @@
             <input type="file" id="myImage" name="myImg" accept="image/*" required>
             <br>
             <br>
-            <input id="createPlantButton" type="button">Submit</button>
-<!--            <button id="createPlantButton" type="Submit">Submit</button>-->
+            <button id="createPlantButton" type="Submit">Submit</button>
         </form>
     </div>
 </body>

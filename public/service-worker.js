@@ -12,6 +12,7 @@ self.addEventListener('install', event => {
         '/',
         '/explore',
         '/create',
+        '/js/bootstrap.min.js',
         '/manifest.json',
         '/javascripts/index.js',
         '/javascripts/create.js',
@@ -46,14 +47,23 @@ self.addEventListener('activate', event => {
 // Fetch event to fetch from cache first
 self.addEventListener('fetch', event => {
   event.respondWith((async () => {
-    const cache = await caches.open("static");
-    const cachedResponse = await cache.match(event.request);
-    if (cachedResponse) {
-      console.log('Service Worker: Fetching from Cache: ', event.request.url);
-      return cachedResponse;
+    try {
+      const networkResponse = await fetch(event.request);
+      const clonedResponse = networkResponse.clone();
+      const dynamicCache = await caches.open('dynamic');
+      await dynamicCache.put(event.request, clonedResponse);
+
+      return networkResponse;
+    } catch (error) {e
+      console.log('Service Worker: Fetching from Cache:', event.request.url);
+      const staticCache = await caches.open('static');
+      const cachedResponse = await staticCache.match(event.request);
+      if (cachedResponse) {
+        return cachedResponse;
+      } else {
+        return new Response('Cached Page Not Found');
+      }
     }
-    console.log('Service Worker: Fetching from URL: ', event.request.url);
-    return fetch(event.request);
   })());
 });
 

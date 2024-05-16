@@ -10,49 +10,10 @@ const addNewPlantToSync = (syncPlantIndexDB, formData) => {
     const transaction = syncPlantIndexDB.transaction([syncPlantsIndexDBName], "readwrite")
     const plantStore = transaction.objectStore(syncPlantsIndexDBName)
 
-    console.log("Form data 2: " + formData.get("myImage").name);
-
-    //const imageFile = formData.get("myImage");
-
-    // Convert the image file to a Blob
-    // const reader = new FileReader();
-    // reader.readAsArrayBuffer(imageFile);
-    // const blob = new Blob([reader.result], {type: imageFile.type});
-
-
     const image = formData.get("myImage");
-
-    let imageData = "";
 
     // Check if an image was selected
     if (image instanceof File) {
-      const reader = new FileReader();
-
-      // Define what to do once the file is loaded
-      reader.onload = function(event) {
-        // Access the binary data of the image
-        const imageData = event.target.result;
-
-        // Now you can use the imageData for further processing
-        console.log("Image data:", imageData);
-      };
-
-      // Read the content of the image file as binary data
-      reader.readAsBinaryString(image);
-    } else {
-      console.log("No image selected.");
-    }
-
-    // reader.onload = function(ev) {
-    //   let bits = image.res;
-    //   let ob = {
-    //     created: new Date(),
-    //     data: bits
-    //   };
-
-
-      console.log("Form data 3: " + formData.get("myImage").name);
-
       const addRequest = plantStore.add({
         name: formData.get("name"),
         enableSuggestions: formData.get("enableSuggestions") === 'on',
@@ -65,7 +26,7 @@ const addNewPlantToSync = (syncPlantIndexDB, formData) => {
         fruit: formData.get("fruit") === 'on',
         sunExposure: formData.get("sunExposure"),
         flowerColour: formData.get("flowerColour"),
-        img: imageData,
+        img: image,
         userId: "bob",
         chat: "w"
       })
@@ -86,7 +47,9 @@ const addNewPlantToSync = (syncPlantIndexDB, formData) => {
         })
       })
     }
-
+  } else {
+    console.log("No image selected.");
+  }
 }
 
 // Function to add new plants to IndexedDB and return a promise

@@ -76,9 +76,8 @@ self.addEventListener('sync', event => {
       getAllSyncPlants(syncPostDB).then((syncPlants) => {
         for (const syncPlant of syncPlants) {
           console.log('Service Worker: Syncing new Plant: ', syncPlant);
-          console.log(syncPlant.text)
           // Create a FormData object
-          const formData = new URLSearchParams();
+          const formData = new FormData();
 
           // Iterate over the properties of the JSON object and append them to FormData
           formData.append("name", syncPlant.name);
@@ -92,28 +91,16 @@ self.addEventListener('sync', event => {
           formData.append("fruit", syncPlant.fruit);
           formData.append("sunExposure", syncPlant.sunExposure);
           formData.append("flowerColour", syncPlant.flowerColour);
-          // formData.append("img", syncPlant.img);
-
-          console.log("fuck####################################################################");
-          // console.log('myImage', localStorage.getItem('myImage'));
-          formData.append("img", syncPlant.myImage);
+          formData.append("img", syncPlant.img);
           formData.append("userId", syncPlant.userId);
           formData.append("chat", syncPlant.chat);
-
-
-
 
           // Fetch with FormData instead of JSON
           fetch('http://localhost:3000/create/add', {
             method: 'POST',
             body: formData,
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-              // 'Content-Type': 'multipart/form-data',
-            },
           }).then(() => {
             console.log('Service Worker: Syncing new Plant: ', syncPlant, ' done');
-            console.log(syncPlant.id)
             deleteSyncPlantFromIndexDB(syncPostDB, syncPlant.id);
             // Send a notification
             // self.registration.showNotification('Plant Synced', {

@@ -12,6 +12,12 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-custom-primary sticky-top">
         <div class="d-flex align-items-center px-4">
             <a class="navbar-brand text-light" href="/explore">PlantPedia</a>
+            <a class="navbar-brand text-light-custom pb-1 px-2 ps-3" href="./" style="font-size: 1rem;">Sign Out
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-box-arrow-right ms-1" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                </svg>
+            </a>
             <div class="navbar-collapse">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
@@ -37,7 +43,7 @@
             <div id="myDropdown" class="dropdown-menu" style="right: 16%;">
                 <a class="dropdown-item" href="/explore/sort/date_time">Date/Time</a>
                 <a class="dropdown-item" href="/explore/sort/identification">Identification Status</a>
-                <a class="dropdown-item" href="/explore/sort/location">Location</a>
+                <a class="dropdown-item" id="location-dropdown" href="/explore/sort/location">Location</a>
             </div>
         </div>
 
@@ -65,8 +71,36 @@
 <!--                            <button class="btn btn-primary">View Plant</button>-->
                         </div>
                         <div class="card-footer">
-                            <% const date = new Date(Date.parse(plant.date)); %>
-                            <small class="text-muted">Found at <%= plant.location + ", on " + date.toLocaleDateString('en-GB'); %></small>
+                            <% const date = new Date(Date.parse(plant.date));
+
+                                // Location extraction
+                                function extractLatLong(locationString) {
+                                    // Regular expression to match latitude and longitude values
+                                    const regex = /lat\s*(-?\d+\.\d+)\s*long\s*(-?\d+\.\d+)/;
+                                    const match = locationString.match(regex);
+
+                                    if (match) {
+                                        // Extract latitude and longitude from the regex match
+                                        const lat = parseFloat(match[1]);
+                                        const long = parseFloat(match[2]);
+                                        return { lat, long };
+                                    } else {
+                                        // No match
+                                        return null;
+                                    }
+                                }
+
+                                function formatCoordinates(lat, lng) {
+                                    const formattedLat = `Lat: ${lat?.toFixed(5)}...`;
+                                    const formattedLng = `Long: ${lng?.toFixed(5)}...`;
+                                    return `${formattedLat}, ${formattedLng}`;
+                                }
+
+                                const location = extractLatLong(plant.location);
+
+                                const formattedCoordinates = formatCoordinates(location?.lat, location?.long);
+                            %>
+                            <small class="text-muted">Found at <strong><%= formattedCoordinates %></strong>, on <strong><%= date.toLocaleDateString('en-GB') %></strong></small>
                         </div>
                     </div>
                 </a>
@@ -95,6 +129,41 @@
                 }
             }
         }
+    }
+
+    // Get user location
+    if ("geolocation" in navigator) {
+        // Geolocation is available
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const lat = position.coords.latitude;
+            const long = position.coords.longitude;
+
+            const locationDropdown = document.getElementById('location-dropdown');
+
+            // Construct the URL with latitude and longitude as query parameters
+            locationDropdown.href = `/explore/sort/location?lat=${lat}&long=${long}`;
+
+
+        }, function(error) {
+            // Handle errors
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    console.error("User denied the request for Geolocation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    console.error("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    console.error("The request to get user location timed out.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    console.error("An unknown error occurred.");
+                    break;
+            }
+        });
+    } else {
+        // Geolocation is not available
+        console.error("Geolocation is not supported by this browser.");
     }
 
     // Get the userID from localStorage

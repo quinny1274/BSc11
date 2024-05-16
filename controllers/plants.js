@@ -17,7 +17,6 @@ exports.create = function (userData, filePath) {
         flowerColour: userData.flowerColour,
         img: filePath,
         userId: userData.userId,
-        chat: "w"
     });
 
   return plant.save().then(plant => {

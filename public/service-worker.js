@@ -93,7 +93,6 @@ self.addEventListener('sync', event => {
           formData.append("flowerColour", syncPlant.flowerColour);
           formData.append("img", syncPlant.img);
           formData.append("userId", syncPlant.userId);
-          formData.append("chat", syncPlant.chat);
 
           // Fetch with FormData instead of JSON
           fetch('http://localhost:3000/create/add', {

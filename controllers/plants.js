@@ -4,7 +4,8 @@ const { SparqlEndpointFetcher } = require("fetch-sparql-endpoint");
 exports.create = function (userData, filePath, userId) {
     let plant = new plantModel({
         name: userData.name,
-        enableSuggestions: userData.enableSuggestions === 'on',
+        //enableSuggestions: userData.enableSuggestions === 'on',
+        enableSuggestions: true,
         date: userData.date,
         location: userData.location,
         description: userData.description,

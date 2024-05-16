@@ -11,6 +11,17 @@ router.get('/', function(req, res, next) {
   })
 });
 
+//TODO find a better way to do this for indexdb caching
+router.get('/allPlants', function (req, res, next) {
+  plants.getAll().then(todos => {
+    console.log(todos);
+    return res.status(200).send(todos);
+  }).catch(err => {
+    console.log(err);
+    res.status(500).send(err);
+  });
+})
+
 router.get('/sort/date_time', function(req, res, next) {
   let result = plants.getAll({date: -1})
 

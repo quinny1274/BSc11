@@ -13,6 +13,8 @@
     <h1><%= title %></h1>
     <div>
         <form action="/create/add" method="POST" enctype="multipart/form-data">
+            <input type="text" id="userID" name="userID">
+
             <label for="name">Name (Leave blank if unknown):</label>
             <input type="text" id="name" name="name">
             <br>
@@ -77,3 +79,9 @@
     </div>
 </body>
 </html>
+
+<script>
+    const userIDInput = document.getElementById('userID');
+    const userID = localStorage.getItem('userID');
+    userIDInput.value = userID;
+</script>

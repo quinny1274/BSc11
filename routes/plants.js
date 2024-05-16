@@ -7,18 +7,21 @@ const { fetchDBpediaData, fetchDBpediaSuggestions} = require("../controllers/pla
 router.post('/addSuggestion', async function (req, res) {
   let userData = req.body;
   const plantId = userData.plantId;
+  const nickname = decodeURIComponent(req.query.userID);
 
   if (req.body.action === 'getSuggestions') {
-    await renderPlantPage(res, plantId, 'bob2', userData.suggestedName);
+    await renderPlantPage(res, plantId, nickname, userData.suggestedName);
   } else if (req.body.action === 'addSuggestion') {
-    let result = suggestionsController.create(userData, "bob2");
+    let result = suggestionsController.create(userData, nickname);
     res.redirect(`/plants/${userData.plantId}`);
   }
 });
 
 router.get('/:id', async function(req, res) {
   const plantId = req.params.id;
-  await renderPlantPage(res, plantId, 'bob2');
+  const nickname = req.query.userID;
+
+  await renderPlantPage(res, plantId, nickname);
 });
 
 router.post('/updateName', function (req, res) {
@@ -46,6 +49,7 @@ async function renderPlantPage(res, plantId, userId, suggestedName = null) {
 
     res.render('plants', {
       title: 'Plant Page',
+      nickname: userId,
       suggestions: suggestions,
       dbPediaSuggestions: dbPediaSuggestions,
       wasPlantCreatedByUser: wasPlantCreatedByUser,

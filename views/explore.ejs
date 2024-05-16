@@ -46,7 +46,7 @@
     <div class="row row-cols-1 row-cols-lg-4 row-cols-md-3 g-4 pt-4 px-2 px-md-5 px-sm-5">
         <% data.forEach(plant => { %>
             <div class="col">
-                <a href="/plants/<%= plant._id %>">
+                <a id="plantLink_<%= plant._id %>" href="/plants/<%= plant._id %>">
                     <div class="card h-100 hover-shadow">
                         <img src="/<%= plant.img %>" class="card-img-top cropped-image" alt="...">
                         <div class="card-body">
@@ -96,4 +96,14 @@
             }
         }
     }
+
+    // Get the userID from localStorage
+    const userID = localStorage.getItem('userID');
+
+    // Attach userID to the href of each plant link
+    const plantLinks = document.querySelectorAll('[id^="plantLink_"]');
+    plantLinks.forEach(link => {
+        const plantId = link.getAttribute('id').split('_')[1];
+        link.href = `/plants/${plantId}?userID=${encodeURIComponent(userID)}`;
+    });
 </script>

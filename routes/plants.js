@@ -2,61 +2,65 @@ var express = require('express');
 var router = express.Router();
 var plants = require('../controllers/plants');
 var suggestionsController = require('../controllers/suggestions');
-const { fetchDBpediaData } = require("../controllers/plants");
+const { fetchDBpediaData, fetchDBpediaSuggestions} = require("../controllers/plants");
 
-router.post('/addSuggestion', function (req, res) {
+router.post('/addSuggestion', async function (req, res) {
   let userData = req.body;
-  let result = suggestionsController.create(userData, "bob");
-  console.log(result);
-  res.redirect(`/plants/${userData.plantId}`);
+  const plantId = userData.plantId;
+  const nickname = decodeURIComponent(req.query.userID);
+
+  if (req.body.action === 'getSuggestions') {
+    await renderPlantPage(res, plantId, nickname, userData.suggestedName);
+  } else if (req.body.action === 'addSuggestion') {
+    let result = suggestionsController.create(userData, nickname);
+    res.redirect(`/plants/${userData.plantId}`);
+  }
+});
+
+router.get('/:id', async function(req, res) {
+  const plantId = req.params.id;
+  const nickname = req.query.userID;
+
+  await renderPlantPage(res, plantId, nickname);
 });
 
 router.post('/updateName', function (req, res) {
   let userData = req.body;
   let result = plants.updateName(userData);
-  console.log(result);
   res.redirect(`/plants/${userData.plantId}`);
 });
 
-router.get('/:id', async function(req, res) {
-  const plantId = req.params.id;
+
+async function renderPlantPage(res, plantId, userId, suggestedName = null) {
   try {
     const plant = await plants.getPlant(plantId);
     if (!plant) {
       return res.status(404).send('Plant not found');
     }
 
-    let userId = "bob"; // When nickname is implemented all occurrences of bob should be replaced with the actual nickname
     const wasPlantCreatedByUser = plant.userId === userId;
     const suggestions = await getSuggestions(wasPlantCreatedByUser, plantId, userId);
+    const dbpediaData = await fetchDBpediaData(plant.name);
+    let dbPediaSuggestions = [];
 
-    // Fetch DBpedia data
-    try {
-      const dbpediaData = await fetchDBpediaData(plant.name);
-      // Render page
-      res.render('plants', {
-        title: 'Plant Page',
-        suggestions: suggestions,
-        wasPlantCreatedByUser: wasPlantCreatedByUser,
-        plant: plant,
-        ...dbpediaData
-      });
-    } catch (dbpediaError) {
-      // Handle DBpedia fetch error
-      res.render('plants', {
-        title: 'Plant Page',
-        suggestions: suggestions,
-        wasPlantCreatedByUser: wasPlantCreatedByUser,
-        plant: plant,
-        ...dbpediaData
-      });
+    if (suggestedName) {
+      dbPediaSuggestions = await fetchDBpediaSuggestions(suggestedName);
     }
-  } catch (plantError) {
-    // Handle plant retrieval error
-    console.error('Error fetching plant:', plantError);
+
+    res.render('plants', {
+      title: 'Plant Page',
+      nickname: userId,
+      suggestions: suggestions,
+      dbPediaSuggestions: dbPediaSuggestions,
+      wasPlantCreatedByUser: wasPlantCreatedByUser,
+      plant: plant,
+      ...dbpediaData
+    });
+  } catch (error) {
+    console.error('Error:', error);
     res.status(500).send('Error fetching plant');
   }
-});
+}
 
 async function getSuggestions(wasPlantCreatedByUser, plantId, userId) {
   let suggestions;

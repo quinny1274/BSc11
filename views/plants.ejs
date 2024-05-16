@@ -14,10 +14,12 @@
 
     <title>Plant Page</title>
 </head>
-<body onload="init('<%= plant.id %>', 'bob')" class="pt-0 px-0">
+<body onload="init('<%= plant.id %>', '<%= nickname %>')" class="pt-0 px-0">
+
+    <input type="hidden" id="nickname" name="nickname" value="<%= nickname %>">
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-        <div class="d-flex align-items-center px-5">
+        <div class="d-flex align-items-center px-4">
             <a class="navbar-brand" href="/explore">PlantPedia</a>
             <div class="navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
@@ -29,7 +31,7 @@
         </div>
     </nav>
 
-    <div class="row pt-5 px-5">
+    <div class="row pt-5 px-4">
         <div class="col-md-6">
             <img src="/<%= plant.img %>" class="card-img-top cropped-image mb-3" alt="<%= plant.description %>">
         </div>
@@ -47,11 +49,16 @@
                 <%}%>
             </div>
 
-            <% if (!wasPlantCreatedByUser && plant.enableSuggestions) {%>
-                <a href="#" id="suggestLink" class="mx-3">Suggest an identification</a>
-            <%}%>
+            <div class="mt-2 <%= dbp_title ? 'ps-2' : '' %>">
+                <% if (!wasPlantCreatedByUser && plant.enableSuggestions) {%>
+                    <a href="#" id="suggestLink" class="pt-3">Suggest an identification →</a>
+                <%}%>
+            </div>
 
-            <div class="mx-3 my-2" id="suggestionsContainer" <% if (!wasPlantCreatedByUser) { %>style="display: none;"<% } %>>
+
+            <div class="mx-3 my-2 mt-3" id="suggestionsContainer" <% if (!wasPlantCreatedByUser && suggestions.length === 0 && dbPediaSuggestions.length === 0) { %>style="display: none;"<% } %>>
+                <input type="hidden" id="suggestionsLength" name="suggestionsLength" value="<%= suggestions.length %>">
+                <input type="hidden" id="dbPediaSuggestionsLength" name="dbPediaSuggestionsLength" value="<%= dbPediaSuggestions.length %>">
                 <% if (wasPlantCreatedByUser && plant.enableSuggestions && suggestions.length !== 0) { %>
                     <p>Suggestions:</p>
                     <form action="/plants/updateName" method="POST">
@@ -66,36 +73,54 @@
                     </form>
                 <% } else if (!wasPlantCreatedByUser && suggestions.length >= 2){ %>
                     <p>Your Suggestions:</p>
-                    <% for (var i = 0; i < suggestions.length; i++) { %>
-                        <p><%= suggestions[i].suggestedName %></p>
-                    <% } %>
+                    <ul>
+                        <% for (var i = 0; i < suggestions.length; i++) { %>
+                            <li><%= suggestions[i].suggestedName %></li>
+                        <% } %>
+                    </ul>
                 <% } else if (!wasPlantCreatedByUser && suggestions.length === 1){ %>
                     <p>Your Suggestions:</p>
                     <% for (var i = 0; i < suggestions.length; i++) { %>
                         <p><%= suggestions[i].suggestedName %></p>
                     <% } %>
-                    <form action="/plants/addSuggestion" method="POST">
-                        <input type="hidden" id="plantId" name="plantId" value="<%= plant.id %>">
-                        <label for="suggestedName">Suggestion:</label>
-                        <input type="text" id="suggestedName" name="suggestedName" required>
-                        <br>
-                        <br>
-                        <button type="Submit" class="btn btn-primary">Submit</button>
+                    <form id="suggestionForm" action="/plants/addSuggestion" method="POST" class="mt-3">
+                        <div class="form-group">
+                            <input type="hidden" id="plantId" name="plantId" value="<%= plant.id %>">
+                            <input type="text" class="form-control w-75" name="suggestedName" placeholder="<%= dbPediaSuggestions.length > 0 ? dbPediaSuggestions[0] : 'Suggestion' %>" list="list-timezone" id="suggestedName">
+                            <datalist id="list-timezone">
+                                <% dbPediaSuggestions.forEach(suggestion => { %>
+                                    <option><%= suggestion %></option>
+                                <% }); %>
+                            </datalist>
+                            <br>
+                            <button type="submit" class="btn btn-outline-secondary me-1" name="action" value="getSuggestions">Search</button>
+                            <button type="submit" class="btn btn-primary" name="action" value="addSuggestion">Submit</button>
+                        </div>
                     </form>
                 <% } else if (!wasPlantCreatedByUser && suggestions.length === 0) { %>
-                    <form action="/plants/addSuggestion" method="POST">
-                        <input type="hidden" id="plantId" name="plantId" value="<%= plant.id %>">
-                        <label for="suggestedName">Suggestion:</label>
-                        <input type="text" id="suggestedName" name="suggestedName" required>
-                        <br>
-                        <br>
-                        <button type="Submit" class="btn btn-primary">Submit</button>
+                    <form id="suggestionForm" action="/plants/addSuggestion" method="POST" class="mt-3">
+                        <div class="form-group">
+                            <input type="hidden" id="plantId" name="plantId" value="<%= plant.id %>">
+                            <input type="text" class="form-control w-75" name="suggestedName" placeholder="<%= dbPediaSuggestions.length > 0 ? dbPediaSuggestions[0] : 'Suggestion' %>" list="list-timezone" id="suggestedName">
+                            <datalist id="list-timezone">
+                                <% dbPediaSuggestions.forEach(suggestion => { %>
+                                    <option><%= suggestion %></option>
+                                <% }); %>
+                            </datalist>
+                            <br>
+                            <button type="submit" class="btn btn-outline-secondary me-1" name="action" value="getSuggestions">Search</button>
+                            <button type="submit" class="btn btn-primary" name="action" value="addSuggestion">Submit</button>
+                        </div>
                     </form>
                 <% } %>
             </div>
 
 
-            <p class="m-2"><%= dbp_comment %>...</p>
+            <% if (dbp_comment) {%>
+                <p class="m-2"><%= dbp_comment %>...</p>
+            <%} else {%>
+                <p class="text-secondary mt-4">This plant has not yet been identified...</p>
+            <%}%>
             <% if (dbp_uri) { %>
                 <div class="px-2 py-2">
                     <a class="cta" href="<%= dbp_uri %>" style="text-decoration: none;">
@@ -124,12 +149,12 @@
                     <p class="mx-2"><b><%= plant.location %></b></p>
                 </div>
             <% } %>
-<!--            <% if (plant.name) { %>-->
-<!--                <div class="d-flex align-items-center">-->
-<!--                    <p class="mr-3">Name:</p>-->
-<!--                    <p class="mx-2"><b><%= plant.name %></b></p>-->
-<!--                </div>-->
-<!--            <% } %>-->
+            <% if (plant.name) { %>
+                <div class="d-flex align-items-center">
+                    <p class="mr-3">Name:</p>
+                    <p class="mx-2"><b><%= plant.name %></b></p>
+                </div>
+            <% } %>
             <% if (plant.description) { %>
                 <div class="d-flex align-items-center">
                     <p class="mr-3">Description:</p>
@@ -139,7 +164,7 @@
             <% if (plant.size) { %>
                 <div class="d-flex align-items-center">
                     <p class="mr-3">Size:</p>
-                    <p class="mx-2"><b><%= plant.size %></b></p>
+                    <p class="mx-2"><b><%= plant.size %> cm</b></p>
                 </div>
             <% } %>
             <% if (plant.flowers || plant.leaves || plant.fruit) {%>
@@ -176,20 +201,19 @@
             <% } %>
         </div>
 
-        <div class="col-md-6 mt-sm-5 mt-md-0 mx-sm-2 mx-md-0" style="display: flex; flex-direction: column-reverse;">
+        <div class="col-md-6 mt-sm-5 mt-md-0 mx-sm-2 mx-md-0 pb-sm-5" style="display: flex; flex-direction: column;">
             <div id="chat_interface" style="display: block;">
                 <div id="history" class="boxed" style="height: 350px; max-height: 350px; overflow-y: auto;"></div>
-                <div id="input" class="button boxed">
-                    <form onsubmit="return false;" class="w-100 pt-2">
-                        <p>
-                            <label for="name">chat: </label>
-                            <input type="text" id="chat_input" name="chat_input" style="width: 80%;">
-                            <button id="chat_send" onclick="sendChatText()">Send</button>
-                        </p>
+                <div id="input" class="button boxed" style="display: flex; align-items: flex-end;">
+                    <form onsubmit="return false;" class="w-100 pt-2" style="display: flex; align-items: flex-end;">
+                        <label for="name" class="mb-2" style="margin-right: 10px;">Chat:</label>
+                        <input class="form-control" type="text" id="chat_input" name="chat_input" style="flex: 1;">
+                        <button class="btn btn-secondary mx-2" id="chat_send" onclick="sendChatText()">Send</button>
                     </form>
                 </div>
             </div>
         </div>
+
 
     </div>
 
@@ -207,7 +231,12 @@
 
 <script>
     // JavaScript to toggle form visibility
+    var suggestionsLength = document.getElementById('suggestionsLength').value;
+    var dbPediaSuggestionsLength = document.getElementById('dbPediaSuggestionsLength').value;
     var suggestLink = document.getElementById('suggestLink');
+
+    if (suggestionsLength > 0 || dbPediaSuggestionsLength > 0) { suggestLink.style.display = 'none'; }
+
     suggestLink?.addEventListener('click', function(event) {
         event.preventDefault();
         var suggestionsContainer = document.getElementById('suggestionsContainer');
@@ -224,4 +253,12 @@
     function scrollToBottom() {
         historyElement.scrollTop = historyElement.scrollHeight;
     }
+
+    // Suggestions dropdown
+    document.addEventListener('DOMContentLoaded', e => {
+        $('#input-datalist').autocomplete()
+    }, false);
+
+
+
 </script>

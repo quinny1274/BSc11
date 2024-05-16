@@ -1,23 +1,30 @@
 function addNewCreatePlantButtonEventListener(ev)  {
-  // event.preventDefault();
-  //TODO check form data is populated
-  console.log('Button listener added');
-
   ev.preventDefault();
 
   const formData = new FormData(document.getElementById("createPlantForm"));
+  let allFieldsFilled = true;
+  const requiredFields = document.querySelectorAll('[required]');
+  requiredFields.forEach(field => {
+    console.log("Form data: " + field.id);
+    if(!field.value.trim()) {
+      allFieldsFilled = false;
+      return;
+    }
+  })
 
+  console.log("Form data: " + requiredFields);
+  if (allFieldsFilled) {
+    openSyncPlantsIndexDB().then((db) => {
+      addNewPlantToSync(db, formData);
+    });
 
-  console.log("FOrm data: " + formData.get("myImage").name);
+    console.log('myImage', myImage);
+    localStorage.setItem('myImage', myImage);
 
-  openSyncPlantsIndexDB().then((db) => {
-    addNewPlantToSync(db, formData);
-  });
-
-  console.log('myImage', myImage);
-  localStorage.setItem('myImage', myImage);
-
-  window.location.href = '/explore';
+    window.location.href = '/explore';
+  }else {
+    alert('Please fill in all required fields.');
+  }
 
 
   // }

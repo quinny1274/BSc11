@@ -22,12 +22,14 @@
     <h1><%= title %></h1>
     <div>
         <form action="/create/add" method="POST" enctype="multipart/form-data">
+            <input type="hidden" id="userID" name="userID">
+
             <label for="name">Name (Leave blank if unknown):</label>
             <input type="text" id="name" name="name">
             <br>
             <br>
-            <label for="enableSuggestions">Enable User Suggestions:</label>
-            <input type="checkbox" id="enableSuggestions" name="enableSuggestions" >
+<!--            <label for="enableSuggestions">Enable User Suggestions:</label>-->
+            <input type="hidden" id="enableSuggestions" name="enableSuggestions" >
             <br>
             <br>
             <label for="date">Date:</label>
@@ -88,3 +90,9 @@
 </body>
 <script src="/javascripts/Geolocation.js"></script>
 </html>
+
+<script>
+    const userIDInput = document.getElementById('userID');
+    const userID = localStorage.getItem('userID');
+    userIDInput.value = userID;
+</script>

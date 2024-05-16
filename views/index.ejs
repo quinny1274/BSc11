@@ -17,9 +17,21 @@
             <input type="text" id="username" name="username" required>
             <button type="submit">Submit</button>
         </form>
-        <a href="/explore">
-            <button>Explore Page</button>
-        </a>
+        <script>
+            // Script block for client-side JavaScript
+            document.getElementById('usernameForm').addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                // Get the username entered by the user
+                const username = document.getElementById('username').value;
+
+                // Store the username in localStorage
+                localStorage.setItem('userID', username);
+
+                // Redirect to another page or perform other actions as needed
+                window.location.href = '/explore'; // Example: Redirect to a success page
+            });
+        </script>
     </div>
 </body>
 </html>

@@ -4,7 +4,8 @@ const { SparqlEndpointFetcher } = require("fetch-sparql-endpoint");
 exports.create = function (userData, filePath, userId) {
     let plant = new plantModel({
         name: userData.name,
-        enableSuggestions: userData.enableSuggestions === 'on',
+        //enableSuggestions: userData.enableSuggestions === 'on',
+        enableSuggestions: true,
         date: userData.date,
         location: userData.location,
         description: userData.description,
@@ -77,7 +78,8 @@ exports.updateName = function (userData) {
 
 exports.fetchDBpediaData = async function(plantName) {
     const fetcher = new SparqlEndpointFetcher();
-    const resource = `http://dbpedia.org/resource/${plantName}`;
+    const modifiedPlantName = plantName.replace(/\s/g, '_');
+    const resource = `http://dbpedia.org/resource/${modifiedPlantName}`;
 
     // Build query
     const sparqlQuery = `
@@ -132,7 +134,7 @@ exports.fetchDBpediaData = async function(plantName) {
 
 exports.fetchDBpediaSuggestions = async function(plantName) {
     const fetcher = new SparqlEndpointFetcher();
-    const resource = `http://dbpedia.org/resource/${plantName}`;
+    const modifiedPlantName = plantName.replace(/\s/g, '_');
 
     // Build query
     const sparqlQuery = `

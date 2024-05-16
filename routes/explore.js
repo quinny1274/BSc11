@@ -4,6 +4,7 @@ const plants = require("../controllers/plants");
 
 router.get('/', function(req, res, next) {
   let result = plants.getAll()
+
   result.then(plants => {
     let data = JSON.parse(plants);
     res.render('explore', { title: 'Explore', data: data, sort: "" });

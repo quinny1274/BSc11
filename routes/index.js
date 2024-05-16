@@ -7,24 +7,20 @@ router.get('/', function(req, res, next) {
 });
 
 // Route to handle form submission
-router.post('/submit', (req, res) => {
-  const {username} = req.body;
-  if (username) {
-    res.cookie('username', username)
-    res.redirect('explore');
-    var cookie = getCookie(req)
-    console.log(cookie)
-  }
-  else {
-    res.status(400).send('Username is required')
-  }
+// router.post('/submit', (req, res) => {
+//   const {username} = req.body;
+//   if (username) {
+//     // Retrieve form data using document.getElementById
+//     console.log(username);
+//
+//     res.redirect('explore');
+//     console.log(username)
+//   }
+//   else {
+//     res.status(400).send('Username is required')
+//   }
+//
+// });
 
-});
-
-// Gets the Cookie for Username for testing.
-function getCookie(req) {
-  var cookie = req.headers.cookie;
-  return cookie.split('; ');
-}
 
 module.exports = router;

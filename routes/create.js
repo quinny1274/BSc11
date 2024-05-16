@@ -23,8 +23,10 @@ router.get('/', function(req, res, next) {
 router.post('/add', upload.single('myImg'), function(req, res, next) {
     let userData = req.body;
     let filePath = req.file.path;
-    let result = plants.create(userData, filePath, "bob");
-    console.log(result);
+    let nickname = userData.userID;
+
+    let result = plants.create(userData, filePath, nickname);
+
     // res.redirect(`/plants/${result._id}`);
     res.redirect(`/explore`);
 });

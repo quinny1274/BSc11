@@ -20,13 +20,26 @@ router.get('/', function(req, res, next) {
     res.render('create', { title: 'Create' });
 });
 
-router.post('/add', upload.single('myImg'), function(req, res, next) {
+// router.post('/add', upload.single('myImg'), function(req, res, next) {
+//     let userData = req.body;
+//     let filePath = req.file.path;
+//     let result = plants.create(userData, filePath, "bob");
+//
+//     console.log(result);
+//     // res.redirect(`/plants/${result._id}`);
+//     // res.redirect(`/explore`);
+// });
+
+router.post('/add', function(req, res, next) {
     let userData = req.body;
-    let filePath = req.file.path;
-    let result = plants.create(userData, filePath, "bob");
-    console.log(result);
-    // res.redirect(`/plants/${result._id}`);
-    res.redirect(`/explore`);
+    let filePath = "here";
+    plants.create(userData, filePath, "bob").then(plant => {
+        console.log(plant);
+        res.status(200).send(plant);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send(err);
+    });
 });
 
 module.exports = router;

@@ -1,15 +1,19 @@
-const addNewCreatePlantButtonEventListener = (event) => {
+function addNewCreatePlantButtonEventListener(ev)  {
   // event.preventDefault();
   //TODO check form data is populated
   console.log('Button listener added');
+
+  ev.preventDefault();
+
   const formData = new FormData(document.getElementById("createPlantForm"));
-  console.log(formData);
+
+
+  console.log("FOrm data: " + formData.get("myImage").name);
+
   openSyncPlantsIndexDB().then((db) => {
     addNewPlantToSync(db, formData);
   });
-  console.log('fuck this');
 
-  const myImage = document.getElementById('myImage').value;
   console.log('myImage', myImage);
   localStorage.setItem('myImage', myImage);
 

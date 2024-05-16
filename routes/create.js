@@ -32,8 +32,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/add', function(req, res, next) {
     let userData = req.body;
-    let filePath = "here";
-    plants.create(userData, filePath, "bob").then(plant => {
+    plants.create(userData, "bob").then(plant => {
         console.log(plant);
         res.status(200).send(plant);
     }).catch(err => {

@@ -9,47 +9,84 @@ const addNewPlantToSync = (syncPlantIndexDB, formData) => {
     console.log("Sync add");
     const transaction = syncPlantIndexDB.transaction([syncPlantsIndexDBName], "readwrite")
     const plantStore = transaction.objectStore(syncPlantsIndexDBName)
-    console.log("FDAUYBFIUYWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
-    const imageFile = formData.get("myImage");
+
+    console.log("Form data 2: " + formData.get("myImage").name);
+
+    //const imageFile = formData.get("myImage");
 
     // Convert the image file to a Blob
     // const reader = new FileReader();
     // reader.readAsArrayBuffer(imageFile);
     // const blob = new Blob([reader.result], {type: imageFile.type});
-    console.log("gesssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
-    const addRequest = plantStore.add({
-      name: formData.get("name"),
-      enableSuggestions: formData.get("enableSuggestions") === 'on',
-      date: formData.get("date"),
-      location: formData.get("location"),
-      description: formData.get("description"),
-      size: formData.get("size"),
-      flowers: formData.get("flowers") === 'on',
-      leaves: formData.get("leaves") === 'on',
-      fruit: formData.get("fruit") === 'on',
-      sunExposure: formData.get("sunExposure"),
-      flowerColour: formData.get("flowerColour"),
-      img: imageFile,
-      userId: "bob",
-      chat: "w"
-    })
-    console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
-    addRequest.addEventListener("success", () => {
-      console.log("Added " + "#" + addRequest.result + ": " + formData)
-      const getRequest = plantStore.get(addRequest.result)
-      getRequest.addEventListener("success", () => {
-        console.log("Found " + JSON.stringify(getRequest.result))
-        // Send a sync message to the service worker
-        navigator.serviceWorker.ready.then((sw) => {
-          sw.sync.register("sync-plant")
-        }).then(() => {
-          console.log("Sync registered");
-        }).catch((err) => {
-          console.log("Sync registration failed: " + JSON.stringify(err))
+
+
+    const image = formData.get("myImage");
+
+    let imageData = "";
+
+    // Check if an image was selected
+    if (image instanceof File) {
+      const reader = new FileReader();
+
+      // Define what to do once the file is loaded
+      reader.onload = function(event) {
+        // Access the binary data of the image
+        const imageData = event.target.result;
+
+        // Now you can use the imageData for further processing
+        console.log("Image data:", imageData);
+      };
+
+      // Read the content of the image file as binary data
+      reader.readAsBinaryString(image);
+    } else {
+      console.log("No image selected.");
+    }
+
+    // reader.onload = function(ev) {
+    //   let bits = image.res;
+    //   let ob = {
+    //     created: new Date(),
+    //     data: bits
+    //   };
+
+
+      console.log("Form data 3: " + formData.get("myImage").name);
+
+      const addRequest = plantStore.add({
+        name: formData.get("name"),
+        enableSuggestions: formData.get("enableSuggestions") === 'on',
+        date: formData.get("date"),
+        location: formData.get("location"),
+        description: formData.get("description"),
+        size: formData.get("size"),
+        flowers: formData.get("flowers") === 'on',
+        leaves: formData.get("leaves") === 'on',
+        fruit: formData.get("fruit") === 'on',
+        sunExposure: formData.get("sunExposure"),
+        flowerColour: formData.get("flowerColour"),
+        img: imageData,
+        userId: "bob",
+        chat: "w"
+      })
+
+      addRequest.addEventListener("success", () => {
+        console.log("Added " + "#" + addRequest.result + ": " + formData)
+        const getRequest = plantStore.get(addRequest.result)
+        getRequest.addEventListener("success", () => {
+          console.log("Found " + JSON.stringify(getRequest.result))
+          // Send a sync message to the service worker
+          navigator.serviceWorker.ready.then((sw) => {
+            sw.sync.register("sync-plant")
+          }).then(() => {
+            console.log("Sync registered");
+          }).catch((err) => {
+            console.log("Sync registration failed: " + JSON.stringify(err))
+          })
         })
       })
-    })
-  }
+    }
+
 }
 
 // Function to add new plants to IndexedDB and return a promise

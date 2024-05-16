@@ -163,7 +163,7 @@
             <% if (plant.size) { %>
                 <div class="d-flex align-items-center">
                     <p class="mr-3">Size:</p>
-                    <p class="mx-2"><b><%= plant.size %></b></p>
+                    <p class="mx-2"><b><%= plant.size %> cm</b></p>
                 </div>
             <% } %>
             <% if (plant.flowers || plant.leaves || plant.fruit) {%>
@@ -200,20 +200,19 @@
             <% } %>
         </div>
 
-        <div class="col-md-6 mt-sm-5 mt-md-0 mx-sm-2 mx-md-0" style="display: flex; flex-direction: column-reverse;">
+        <div class="col-md-6 mt-sm-5 mt-md-0 mx-sm-2 mx-md-0 pb-sm-5" style="display: flex; flex-direction: column;">
             <div id="chat_interface" style="display: block;">
                 <div id="history" class="boxed" style="height: 350px; max-height: 350px; overflow-y: auto;"></div>
-                <div id="input" class="button boxed">
-                    <form onsubmit="return false;" class="w-100 pt-2">
-                        <p>
-                            <label for="name">Chat: </label>
-                            <input class="form-control" type="text" id="chat_input" name="chat_input" style="width: 80%;">
-                            <button class="btn btn-secondary" id="chat_send" onclick="sendChatText()">Send</button>
-                        </p>
+                <div id="input" class="button boxed" style="display: flex; align-items: flex-end;">
+                    <form onsubmit="return false;" class="w-100 pt-2" style="display: flex; align-items: flex-end;">
+                        <label for="name" class="mb-2" style="margin-right: 10px;">Chat:</label>
+                        <input class="form-control" type="text" id="chat_input" name="chat_input" style="flex: 1;">
+                        <button class="btn btn-secondary mx-2" id="chat_send" onclick="sendChatText()">Send</button>
                     </form>
                 </div>
             </div>
         </div>
+
 
     </div>
 

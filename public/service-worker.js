@@ -13,6 +13,7 @@ self.addEventListener('install', event => {
         '/explore',
         '/create',
         '/js/bootstrap.min.js',
+        '/css/bootstrap.min.css',
         '/manifest.json',
         '/javascripts/index.js',
         '/javascripts/create.js',
@@ -54,7 +55,7 @@ self.addEventListener('fetch', event => {
       await dynamicCache.put(event.request, clonedResponse);
 
       return networkResponse;
-    } catch (error) {e
+    } catch (error) {
       console.log('Service Worker: Fetching from Cache:', event.request.url);
       const staticCache = await caches.open('static');
       const cachedResponse = await staticCache.match(event.request);

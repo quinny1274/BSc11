@@ -50,9 +50,9 @@ self.addEventListener('fetch', event => {
   event.respondWith((async () => {
     try {
       const networkResponse = await fetch(event.request);
-      const clonedResponse = networkResponse.clone();
-      const dynamicCache = await caches.open('dynamic');
-      await dynamicCache.put(event.request, clonedResponse);
+      // const clonedResponse = networkResponse.clone();
+      // const dynamicCache = await caches.open('dynamic');
+      // await dynamicCache.put(event.request, clonedResponse);
 
       return networkResponse;
     } catch (error) {

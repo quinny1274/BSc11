@@ -1,7 +1,7 @@
 const plantModel = require('../models/plants');
 const {SparqlEndpointFetcher} = require("fetch-sparql-endpoint");
 
-exports.create = function (userData, filePath, userId) {
+exports.create = function (userData, filePath) {
     let plant = new plantModel({
         name: userData.name,
         //enableSuggestions: userData.enableSuggestions === 'on',
@@ -16,7 +16,7 @@ exports.create = function (userData, filePath, userId) {
         sunExposure: userData.sunExposure,
         flowerColour: userData.flowerColour,
         img: filePath,
-        userId: userId,
+        userId: userData.userId,
         chat: "w"
     });
 

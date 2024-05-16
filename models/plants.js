@@ -4,7 +4,7 @@ let Schema = mongoose.Schema;
 
 let PlantSchema = new Schema({
   name: {type: String},
-  // enableSuggestions: {type: Boolean},
+  enableSuggestions: {type: Boolean},
   date: {type: Date},
   location: {type: String},
   description: {type: String, max: 1000},

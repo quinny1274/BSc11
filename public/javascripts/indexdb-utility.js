@@ -27,7 +27,7 @@ const addNewPlantToSync = (syncPlantIndexDB, formData) => {
         sunExposure: formData.get("sunExposure"),
         flowerColour: formData.get("flowerColour"),
         img: image,
-        userId: "bob",
+        userId: formData.get("userID"),
         chat: "w"
       })
 

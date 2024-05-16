@@ -23,8 +23,7 @@ router.get('/', function (req, res, next) {
 router.post('/add', upload.single('img'), function (req, res, next) {
   let userData = req.body;
   let filePath = req.file.path;
-  let nickname = userData.userID;
-  plants.create(userData, filePath, nickname).then(plant => {
+  plants.create(userData, filePath).then(plant => {
     console.log(plant);
     res.status(200).send(plant);
   }).catch(err => {

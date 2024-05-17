@@ -169,3 +169,7 @@ a {
   min-height: 300px;
   max-width: 40%;
 }
+
+.btn-no-outline {
+  border: none;
+}

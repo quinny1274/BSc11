@@ -87,23 +87,42 @@
 </html>
 
 <script>
-  function openFilterDropdown() {
-    document.getElementById("myDropdown").classList.toggle("show");
-  }
+    function openFilterDropdown() {
+        document.getElementById("filterDropdown").classList.toggle("show");
+    }
+    function openSortDropdown() {
+        document.getElementById("sortDropdown").classList.toggle("show");
+    }
 
   // Close the dropdown menu if the user clicks outside of it
   window.onclick = function (event) {
-    if (!event.target.matches('.dropbtn')) {
-      var dropdowns = document.getElementsByClassName("dropdown-content");
-      var i;
-      for (i = 0; i < dropdowns.length; i++) {
-        var openDropdown = dropdowns[i];
-        if (openDropdown.classList.contains('show')) {
-          openDropdown.classList.remove('show');
-        }
+      if (!event.target.matches('.dropbtn')) {
+          var dropdowns = document.getElementsByClassName("dropdown-content");
+          var i;
+          for (i = 0; i < dropdowns.length; i++) {
+              var openDropdown = dropdowns[i];
+              if (openDropdown.classList.contains('show')) {
+                  openDropdown.classList.remove('show');
+              }
+          }
       }
     }
-  }
+
+    document.getElementById('flowers-filter').addEventListener('change', function() {
+        if (this.checked) {
+            window.location.href = '/explore?filter=flowers';
+        }
+    });
+    document.getElementById('leaves-filter').addEventListener('change', function() {
+        if (this.checked) {
+            window.location.href = '/explore?filter=leaves';
+        }
+    });
+    document.getElementById('fruit-filter').addEventListener('change', function() {
+        if (this.checked) {
+            window.location.href = '/explore?filter=fruit';
+        }
+    });
 
   // Get user location
   if ("geolocation" in navigator) {

@@ -165,7 +165,7 @@ a {
 .show {display:block;}
 
 #map {
-  min-width: 300px;
+  min-width: 100%;
   min-height: 300px;
   max-width: 40%;
 }

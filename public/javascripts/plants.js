@@ -24,7 +24,11 @@ function init(plantId) {
       getAllChats(db).then((chats) => {
         chats.forEach(chat => {
           if (chat.plantId === plantId){
-            writeOnHistory('<b>' + 'who' + ':</b> ' + chat.message)
+            let who = chat.userId
+            if (who === userId) {
+              who = 'Me';
+            }
+            writeOnHistory('<b>' + who + ':</b> ' + chat.message)
           }
         })
       });

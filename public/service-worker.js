@@ -65,10 +65,17 @@ self.addEventListener('fetch', event => {
   event.respondWith((async () => {
     try {
       console.log('Fetching:', event.request.url);
+      if (event.request.url.includes("http://localhost:3000/public/images/uploads/")) {
+        const dynamicCache = await caches.open('dynamic');
+        const cachedResponse = await dynamicCache.match(event.request);
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+      }
       const networkResponse = await fetch(event.request);
       if (event.request.url.includes("http://localhost:3000/public/images/uploads/") || event.request.url.includes("http://localhost:3000/plants/")){
-        const clonedResponse = networkResponse.clone();
         const dynamicCache = await caches.open('dynamic');
+        const clonedResponse = networkResponse.clone();
         await dynamicCache.put(event.request, clonedResponse);
       }
 

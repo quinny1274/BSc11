@@ -10,9 +10,9 @@ exports.create = function (userData, filePath) {
         location: userData.location,
         description: userData.description,
         size: userData.size,
-        flowers: userData.flowers === 'on',
-        leaves: userData.leaves === 'on',
-        fruit: userData.fruit === 'on',
+        flowers: userData.flowers,
+        leaves: userData.leaves,
+        fruit: userData.fruit,
         sunExposure: userData.sunExposure,
         flowerColour: userData.flowerColour,
         img: filePath,
@@ -20,7 +20,6 @@ exports.create = function (userData, filePath) {
     });
 
   return plant.save().then(plant => {
-    console.log(plant);
 
     return JSON.stringify(plant);
   }).catch(err => {
@@ -30,20 +29,25 @@ exports.create = function (userData, filePath) {
   });
 };
 
-exports.getAll = function (sortBy = null) {
-  let query = plantModel.find({});
+exports.getAll = function (sortBy = null, filter = null) {
+    let query = plantModel.find({});
 
-  // If sortBy, sort results
-  if (sortBy) {
-    query = query.sort(sortBy);
-  }
+    // Apply filter if provided
+    if (filter) {
+        query = query.where(filter, true);
+    }
 
-  return query.then(plants => {
-    return JSON.stringify(plants);
-  }).catch(err => {
-    console.log(err);
-    return null;
-  });
+    // If sortBy, sort results
+    if (sortBy) {
+        query = query.sort(sortBy);
+    }
+
+    return query.then(plants => {
+        return JSON.stringify(plants);
+    }).catch(err => {
+        console.log(err);
+        return null;
+    });
 };
 
 exports.getPlant = function (plantId) {

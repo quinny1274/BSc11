@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
 //TODO find a better way to do this for indexdb caching
 router.get('/allPlants', function (req, res, next) {
   plants.getAll().then(plants => {
-    console.log(plants);
+    // console.log(plants);
     return res.status(200).send(plants);
   }).catch(err => {
     console.log(err);
@@ -32,6 +32,17 @@ router.get('/allChats', function (req, res, next) {
     res.status(500).send(err);
   });
 })
+
+router.get('/filter', function(req, res, next) {
+  let filter = req.query.filter;
+  let result = plants.getAll({date: -1}, filter);
+
+  result.then(plants => {
+    let data = JSON.parse(plants);
+    res.render('explore', { title: 'Explore', data: data, sort: "Date/Time" });
+  })
+});
+
 
 router.get('/sort/date_time', function(req, res, next) {
   let result = plants.getAll({date: -1})
@@ -72,7 +83,7 @@ router.get('/sort/location', function(req, res, next) {
     // Sort the data based on distance
     data.sort((a, b) => a.distance - b.distance);
 
-    res.render('explore', { title: 'Explore', data: data, sort: "Identification" });
+    res.render('explore', { title: 'Explore', data: data, sort: "Location" });
   })
 });
 

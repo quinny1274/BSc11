@@ -22,6 +22,7 @@ self.addEventListener('install', event => {
         '/javascripts/plants.js',
         '/javascripts/explore.js',
         '/javascripts/indexdb-utility.js',
+        '/javascripts/indexdb-chat-utility.js',
         '/stylesheets/style.css',
         '/images/image_icon.png',
         // b,

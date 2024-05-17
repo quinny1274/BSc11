@@ -35,15 +35,26 @@ window.onload = function () {
   // }
   if (navigator.onLine) {
     fetch('http://localhost:3000/explore/allPlants')
-      // plants.getAll()
       .then(function (res) {
         return res.json();
-      }).then(function (newTodos) {
+      }).then(function (newPlants) {
       openPlantsIndexDB().then((db) => {
-        // insertTodoInList(db, newTodos)
         deleteAllExistingPlantFromIndexDB(db).then(() => {
-          addNewPlantsToIndexDB(db, newTodos).then(() => {
+          addNewPlantsToIndexDB(db, newPlants).then(() => {
             console.log("All new plants added to IDB")
+          })
+        });
+      });
+    });
+
+    fetch('http://localhost:3000/explore/allChats')
+      .then(function (res) {
+        return res.json();
+      }).then(function (newChats) {
+      openChatsIndexDB().then((db) => {
+        deleteAllExistingChatFromIndexDB(db).then(() => {
+          addNewChatsToIndexDB(db, newChats).then(() => {
+            console.log("All new chats added to IDB")
           })
         });
       });

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const plants = require("../controllers/plants");
+const chats = require("../controllers/chats");
 
 router.get('/', function(req, res, next) {
   let result = plants.getAll()
@@ -13,9 +14,19 @@ router.get('/', function(req, res, next) {
 
 //TODO find a better way to do this for indexdb caching
 router.get('/allPlants', function (req, res, next) {
-  plants.getAll().then(todos => {
-    console.log(todos);
-    return res.status(200).send(todos);
+  plants.getAll().then(plants => {
+    console.log(plants);
+    return res.status(200).send(plants);
+  }).catch(err => {
+    console.log(err);
+    res.status(500).send(err);
+  });
+})
+
+router.get('/allChats', function (req, res, next) {
+  chats.getAll().then(chats => {
+    console.log(chats);
+    return res.status(200).send(chats);
   }).catch(err => {
     console.log(err);
     res.status(500).send(err);

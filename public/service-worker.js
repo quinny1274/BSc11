@@ -61,15 +61,16 @@ self.addEventListener('activate', event => {
 
 // Fetch event to fetch from cache first
 self.addEventListener('fetch', event => {
+
   event.respondWith((async () => {
     try {
+      console.log('Fetching:', event.request.url);
       const networkResponse = await fetch(event.request);
-      // event.request.forEach(a => {
-      //   console.log('event Request: ' + a.body);
-      // })
-      // const clonedResponse = networkResponse.clone();
-      // const dynamicCache = await caches.open('dynamic');
-      // await dynamicCache.put(event.request, clonedResponse);
+      if (event.request.url.includes("http://localhost:3000/public/images/uploads/") || event.request.url.includes("http://localhost:3000/plants/")){
+        const clonedResponse = networkResponse.clone();
+        const dynamicCache = await caches.open('dynamic');
+        await dynamicCache.put(event.request, clonedResponse);
+      }
 
       return networkResponse;
     } catch (error) {

@@ -1,5 +1,5 @@
 importScripts('/javascripts/indexdb-plants-utility.js');
-// importScripts('/javascripts/indexdb-sync-chats.js');
+importScripts('/javascripts/indexdb-sync-chats.js');
 
 // Use the install event to pre-cache all initial resources.
 self.addEventListener('install', event => {
@@ -95,6 +95,7 @@ self.addEventListener('fetch', event => {
       } else if (cachedResponse) {
         return cachedResponse;
       } else {
+        console.log('Cached Page Not Found');
         return new Response('Cached Page Not Found');
       }
     }
@@ -103,8 +104,8 @@ self.addEventListener('fetch', event => {
 
 // Sync event to sync the plants
 self.addEventListener('sync', event => {
+  // syncChats(event);
   syncPlants(event);
-  syncChats(event);
 });
 
 function syncPlants(event) {
@@ -152,23 +153,23 @@ function syncPlants(event) {
   }
 }
 
-function syncChats(event) {
-  if (event.tag === 'sync-chat') {
-    console.log('Service Worker: Syncing new Chats');
-    openSyncChatsIndexDB().then((syncPostDB) => {
-      getAllSyncChats(syncPostDB).then((syncChats) => {
-        for (const syncChat of syncChats) {
-          console.log('Service Worker: Syncing new Plant: ', syncChat);
-
-          let result = sendChatTextWithParams(syncChat.plantId, syncChat.message, syncChat.userId)
-          if (result) {
-            console.log('Service Worker: Syncing new Plant: ', syncChat, ' done');
-            deleteSyncPlantFromIndexDB(syncPostDB, syncChat.id);
-          } else {
-            console.error('Service Worker: Syncing new Plant: ', syncChat, ' failed');
-          }
-        }
-      });
-    });
-  }
-}
+// function syncChats(event) {
+//   if (event.tag === 'sync-chat') {
+//     console.log('Service Worker: Syncing new Chats');
+//     openSyncChatsIndexDB().then((syncPostDB) => {
+//       getAllSyncChats(syncPostDB).then((syncChats) => {
+//         for (const syncChat of syncChats) {
+//           console.log('Service Worker: Syncing new Plant: ', syncChat);
+//
+//           let result = sendChatTextWithParams(syncChat.plantId, syncChat.message, syncChat.userId)
+//           if (result) {
+//             console.log('Service Worker: Syncing new Plant: ', syncChat, ' done');
+//             deleteSyncPlantFromIndexDB(syncPostDB, syncChat.id);
+//           } else {
+//             console.error('Service Worker: Syncing new Plant: ', syncChat, ' failed');
+//           }
+//         }
+//       });
+//     });
+//   }
+// }

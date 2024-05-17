@@ -5,6 +5,8 @@ The video demonstrating the web app can be found at this link https://drive.goog
 ## SOFTWARE CONFIGURATION AND USAGE GUIDE
 In the terminal under the BSc11 directory run npm install 
 
+Open MongoDB and connect to it.
+
 If you are using Webstorm add a new node.js configuration and add bin\www in javascript file
 
 <img src="images/1C.PNG" alt="Edit configurations" width="700">

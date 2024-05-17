@@ -34,87 +34,98 @@
         </div>
     </nav>
 
-    <h2><%= title %></h2>
-    <div class="d-flex justify-content-center mx-5">
-
+    <!--<div class="d-flex justify-content-center mx-5"> -->
+    <div class="container">
         <form id="createPlantForm" action="/explore">
-
             <input type="hidden" id="userID" name="userID">
 
-            <div class="mb-3">
-                <label for="name" class="form-label">Name (Leave blank if unknown):</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Plant Name">
-            </div>
+            <h4 class="my-4 pt-4">Add a new plant sighting</h4>
 
-            <input type="hidden" id="enableSuggestions" name="enableSuggestions" >
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name (Leave blank if unknown):</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Plant Name">
+                    </div>
 
-            <div class="mb-3">
-                <label for="date" class="form-label">Date:</label>
-                <input type="datetime-local" class="form-control" id="date" name="date" required>
-            </div>
+                    <input type="hidden" id="enableSuggestions" name="enableSuggestions">
 
-            <div class="mb-3">
-                <label for="location" class="form-label mb-2">Location:</label>
-                <div class="card mb-2" id="map"></div>
-                <input type="text" class="form-control" id="location" name="location" required>
-            </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date:</label>
+                        <input type="datetime-local" class="form-control" id="date" name="date" required>
+                    </div>
 
-            <div class="mb-3">
-                <label for="description" class="form-label">Description:</label>
-                <input type="text" class="form-control" id="description" name="description" required>
-            </div>
+                    <div class="mb-3">
+                        <label for="location" class="form-label mb-2">Location:</label>
+                        <div class="container d-flex justify-content-center">
+                            <br>
+                            <div class="card mb-3" id="map"></div>
+                        </div>
+                        <input type="text" class="form-control" id="location" name="location" required>
+                    </div>
 
-            <label for="size" class="form-label">Size:</label>
-            <div class="input-group mb-3">
-                <input type="number" class="form-control" id="size" aria-label="Size" aria-describedby="basic-addon2" required>
-                <span class="input-group-text" id="basic-addon2">cm</span>
-            </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description:</label>
+                        <input type="text" class="form-control" id="description" name="description" required>
+                    </div>
 
-            <label class="form-label">Properties:</label>
-            <div class="mb-3 px-4">
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="flowers" name="flowers">
-                    <label for="flowers" class="form-label">Flowers</label>
+                    <div class="mb-3">
+                        <label for="size" class="form-label">Size:</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="size" name="size" aria-label="Size" aria-describedby="basic-addon2" required>
+                            <span class="input-group-text" id="basic-addon2">cm</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="flowerColour" class="form-label">Flower Colour:</label>
+                        <input type="text" class="form-control" id="flowerColour" name="flowerColour" required>
+                    </div>
                 </div>
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="leaves" name="leaves">
-                    <label for="leaves" class="form-label">Leaves</label>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="fruit" name="fruit">
-                    <label for="fruit" class="form-label">Fruit</label>
+
+                <div class="col-md-6">
+                    <label class="form-label">Properties:</label>
+                    <div class="px-4 mb-3">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="flowers" name="flowers">
+                            <label for="flowers" class="form-label">Flowers</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="leaves" name="leaves">
+                            <label for="leaves" class="form-label">Leaves</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="fruit" name="fruit">
+                            <label for="fruit" class="form-label">Fruit</label>
+                        </div>
+                    </div>
+
+                    <label class="form-label">Sun Exposure:</label>
+                    <div class="px-4 mb-3">
+                        <div class="form-radio">
+                            <input type="radio" class="form-radio-input" id="fullSun" name="sunExposure" value="Full Sun" required>
+                            <label for="fullSun" class="form-label">Full Sun</label>
+                        </div>
+                        <div class="form-radio">
+                            <input type="radio" class="form-radio-input" id="partialShade" name="sunExposure" value="Partial Shade" required>
+                            <label for="partialShade" class="form-label">Partial Shade</label>
+                        </div>
+                        <div class="form-radio">
+                            <input type="radio" class="form-radio-input" id="fullShade" name="sunExposure" value="Full Shade" required>
+                            <label for="fullShade" class="form-label">Full Shade</label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="myImage" class="form-label">Choose an image</label><br><br>
+                        <input type="file" class="form-control" id="myImage" name="myImage" accept="image/*" required>
+                    </div>
+
                 </div>
             </div>
-
-            <label class="form-label">Sun Exposure:</label>
-            <div class="mb-3 px-4">
-                <div class="form-radio">
-                    <input type="radio" class="form-radio-input" id="fullSun" name="sunExposure" value="Full Sun" required>
-                    <label for="sunExposure" class="form-label">Full Sun</label>
-                </div>
-                <div class="form-radio">
-                    <input type="radio" class="form-radio-input" id="partialShade" name="sunExposure" value="Partial Shade" required>
-                    <label for="sunExposure" class="form-label">Partial Shade</label>
-                </div>
-                <div class="form-radio">
-                    <input type="radio" class="form-radio-input" id="fullShade" name="sunExposure" value="Full Shade" required>
-                    <label for="sunExposure" class="form-label">Full Shade</label>
-                </div>
+            <div class="container d-flex justify-content-center w-50 pt-3">
+                <button id="createPlantButton" type="Submit" class="btn btn-primary w-50">Submit</button>
             </div>
-
-
-            <div class="mb-3">
-                <label for="flowerColour" class="form-label">Flower Colour:</label>
-                <input type="text" class="form-control" id="flowerColour" name="flowerColour" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="myImage" class="form-label">Choose an image</label><br><br>
-                <input type="file"  class="form-control" id="myImage" name="myImage" accept="image/*" required>
-            </div>
-
-
-            <button id="createPlantButton" type="Submit">Submit</button>
         </form>
     </div>
 </body>

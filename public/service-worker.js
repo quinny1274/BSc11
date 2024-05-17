@@ -1,4 +1,4 @@
-importScripts('/javascripts/indexdb-utility.js');
+importScripts('/javascripts/indexdb-plants-utility.js');
 
 // Use the install event to pre-cache all initial resources.
 self.addEventListener('install', event => {
@@ -21,8 +21,8 @@ self.addEventListener('install', event => {
         '/javascripts/create.js',
         '/javascripts/plants.js',
         '/javascripts/explore.js',
-        '/javascripts/indexdb-utility.js',
-        '/javascripts/indexdb-chat-utility.js',
+        '/javascripts/indexdb-plants-utility.js',
+        '/javascripts/indexdb-chats-utility.js',
         '/stylesheets/style.css',
         '/images/image_icon.png',
         // b,

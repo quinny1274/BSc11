@@ -16,3 +16,23 @@ If you are using Webstorm add a new node.js configuration and add bin\www in Jav
 <img src="images/3c.PNG" alt="Add bin\www to JavaScript file" width="700">
 
 Run and then navigate to http://localhost:3000/ in a web browser
+
+Screenshots:
+
+<img src="images/sign in.png">
+
+<img src="images/explore page.png">
+
+<img src="images/new sighting.png">
+
+<img src="images/plant page.png">
+
+<img src="images/suggest.png">
+
+<img src="images/accept suggestion.png">
+
+<img src="images/plant page mobile.png">
+
+<img src="images/explore page mobile.png">
+
+<img src="images/filter_sorting.png">

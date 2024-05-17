@@ -104,8 +104,8 @@ self.addEventListener('fetch', event => {
 
 // Sync event to sync the plants
 self.addEventListener('sync', event => {
-  // syncChats(event);
   syncPlants(event);
+  syncChats(event);
 });
 
 function syncPlants(event) {
@@ -153,23 +153,34 @@ function syncPlants(event) {
   }
 }
 
-// function syncChats(event) {
-//   if (event.tag === 'sync-chat') {
-//     console.log('Service Worker: Syncing new Chats');
-//     openSyncChatsIndexDB().then((syncPostDB) => {
-//       getAllSyncChats(syncPostDB).then((syncChats) => {
-//         for (const syncChat of syncChats) {
-//           console.log('Service Worker: Syncing new Plant: ', syncChat);
-//
-//           let result = sendChatTextWithParams(syncChat.plantId, syncChat.message, syncChat.userId)
-//           if (result) {
-//             console.log('Service Worker: Syncing new Plant: ', syncChat, ' done');
-//             deleteSyncPlantFromIndexDB(syncPostDB, syncChat.id);
-//           } else {
-//             console.error('Service Worker: Syncing new Plant: ', syncChat, ' failed');
-//           }
-//         }
-//       });
-//     });
-//   }
-// }
+function syncChats(event) {
+  if (event.tag === 'sync-chat') {
+    console.log('Service Worker: Syncing new Chats');
+    openSyncChatsIndexDB().then((syncPostDB) => {
+      getAllSyncChats(syncPostDB).then((syncChats) => {
+        for (const syncChat of syncChats) {
+          console.log('Service Worker: Syncing new Chat: ', syncChat);
+
+          const formData = new FormData();
+          formData.append("plantId", syncChat.plantId);
+          formData.append("message", syncChat.message);
+          formData.append("userId", syncChat.userId);
+
+          fetch('http://localhost:3000/plants/addChat', {
+            method: 'POST',
+            body: formData,
+          }).then(() => {
+            console.log('Service Worker: Syncing new Chat: ', syncChat, ' done');
+            deleteSyncChatFromIndexDB(syncPostDB, syncChat.id);
+            // Send a notification
+            // self.registration.showNotification('Plant Synced', {
+            //   body: 'Plant synced successfully!',
+            // });
+          }).catch((err) => {
+            console.error('Service Worker: Syncing new Plant: ', syncChat, ' failed');
+          });
+        }
+      });
+    });
+  }
+}

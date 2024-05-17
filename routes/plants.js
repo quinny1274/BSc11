@@ -3,6 +3,7 @@ var router = express.Router();
 var plants = require('../controllers/plants');
 var suggestionsController = require('../controllers/suggestions');
 const { fetchDBpediaData, fetchDBpediaSuggestions} = require("../controllers/plants");
+const chats = require("../controllers/chats");
 
 router.post('/addSuggestion', async function (req, res) {
   let userData = req.body;
@@ -16,6 +17,19 @@ router.post('/addSuggestion', async function (req, res) {
     res.redirect(`/plants/${userData.plantId}`);
   }
 });
+
+router.post('/addChat', async function (req, res) {
+  let userData = req.body;
+
+  chats.create(userData.plantId, userData.message, userData.userId).then(plant => {
+    console.log(plant);
+    res.status(200).send(plant);
+  }).catch(err => {
+    console.log(err);
+    res.status(500).send(err);
+  });
+});
+
 
 router.get('/:id', async function(req, res) {
   const plantId = req.params.id;

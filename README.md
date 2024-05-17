@@ -19,20 +19,29 @@ Run and then navigate to http://localhost:3000/ in a web browser
 
 Screenshots:
 
+Sign in:
 <img src="images/sign in.png">
 
+Explore Page:
 <img src="images/explore page.png">
 
+New sighting:
 <img src="images/new sighting.png">
 
+Plant details page:
 <img src="images/plant page.png">
 
+Suggesting an identification:
 <img src="images/suggest.png">
 
+Accepting an identification:
 <img src="images/accept suggestion.png">
 
+Plant detail page (Mobile):
 <img src="images/plant page mobile.png">
 
+Explore page (Mobile):
 <img src="images/explore page mobile.png">
 
+Filtering/Sorting:
 <img src="images/filter_sorting.png">

@@ -3,6 +3,8 @@ importScripts('/javascripts/indexdb-utility.js');
 // Use the install event to pre-cache all initial resources.
 self.addEventListener('install', event => {
   console.log('Service Worker: Installing....');
+  // let a = localStorage.getItem("userID");
+  // let b = '/plants/66469504721f0aafda6beabd?userID=' + a;
   event.waitUntil((async () => {
 
     console.log('Service Worker: Caching App Shell at the moment......');
@@ -17,9 +19,22 @@ self.addEventListener('install', event => {
         '/manifest.json',
         '/javascripts/index.js',
         '/javascripts/create.js',
+        '/javascripts/plants.js',
+        '/javascripts/explore.js',
         '/javascripts/indexdb-utility.js',
         '/stylesheets/style.css',
         '/images/image_icon.png',
+        // b,
+      ]);
+      console.log('Service Worker: App Shell Cached');
+    } catch {
+      console.log("error occured while caching...")
+    }
+
+    try {
+      const cache = await caches.open("dynamic");
+      cache.addAll([
+        '/plants/66469504721f0aafda6beabd?userID=quinny1274',
       ]);
       console.log('Service Worker: App Shell Cached');
     } catch {
@@ -29,14 +44,13 @@ self.addEventListener('install', event => {
   })());
 });
 
-//clear cache on reload
 self.addEventListener('activate', event => {
 // Remove old caches
   event.waitUntil(
     (async () => {
       const keys = await caches.keys();
       return keys.map(async (cache) => {
-        if (cache !== "static") {
+        if (cache !== "static" && cache !== "dynamic") {
           console.log('Service Worker: Removing old cache: ' + cache);
           return await caches.delete(cache);
         }
@@ -50,6 +64,9 @@ self.addEventListener('fetch', event => {
   event.respondWith((async () => {
     try {
       const networkResponse = await fetch(event.request);
+      // event.request.forEach(a => {
+      //   console.log('event Request: ' + a.body);
+      // })
       // const clonedResponse = networkResponse.clone();
       // const dynamicCache = await caches.open('dynamic');
       // await dynamicCache.put(event.request, clonedResponse);
@@ -57,9 +74,15 @@ self.addEventListener('fetch', event => {
       return networkResponse;
     } catch (error) {
       console.log('Service Worker: Fetching from Cache:', event.request.url);
+
+      const dynamicCache = await caches.open('dynamic');
+      const dynamicCachedResponse = await dynamicCache.match(event.request);
+
       const staticCache = await caches.open('static');
       const cachedResponse = await staticCache.match(event.request);
-      if (cachedResponse) {
+      if (dynamicCachedResponse) {
+        return dynamicCachedResponse;
+      }else if (cachedResponse) {
         return cachedResponse;
       } else {
         return new Response('Cached Page Not Found');

@@ -2,7 +2,7 @@ let globalUserId = null;
 let globalPlantId = null;
 let socket = io();
 
-function init(plantId, userId) {
+function init(plantId) {
     socket.on('joined', function (plantId, userId) {
         if (userId === globalUserId) {
         } else {
@@ -16,6 +16,7 @@ function init(plantId, userId) {
         }
         writeOnHistory('<b>' + who + ':</b> ' + chatText)
     })
+    let userId = localStorage.getItem('userID');
     connectToPlantChat(plantId, userId)
     socket.emit('history', globalPlantId);
 }

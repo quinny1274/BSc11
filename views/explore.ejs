@@ -6,175 +6,114 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/stylesheets/style.css">
     <script src="/js/bootstrap.min.js"></script>
+    <script src="/javascripts/explore.js"></script>
+    <script src="/javascripts/indexdb-utility.js"></script>
 
 </head>
 <body class="pt-0 px-0">
-    <nav class="navbar navbar-expand-lg navbar-light bg-custom-primary sticky-top">
-        <div class="d-flex align-items-center px-4">
-            <a class="navbar-brand text-light" href="/explore">PlantPedia</a>
-            <a class="navbar-brand text-light-custom pb-1 px-2 ps-3" href="./" style="font-size: 1rem;">Sign Out
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-box-arrow-right ms-1" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
-                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
-                </svg>
-            </a>
-            <div class="navbar-collapse">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-outline-secondary text-light-custom px-2" href="/create">+ Add Plant</a>
-                    </li>
-                </ul>
-            </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-custom-primary sticky-top">
+    <div class="d-flex align-items-center px-4">
+        <a class="navbar-brand text-light" href="/explore">PlantPedia</a>
+        <a class="navbar-brand text-light-custom pb-1 px-2 ps-3" href="./" style="font-size: 1rem;">Sign Out
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                 class="bi bi-box-arrow-right ms-1" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                      d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+                <path fill-rule="evenodd"
+                      d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+            </svg>
+        </a>
+        <div class="navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-secondary text-light-custom px-2" href="/create">+ Add Plant</a>
+                </li>
+            </ul>
         </div>
-
-        <div class="flex-grow-1"></div>
-
-        <div class="dropdown px-4">
-            <button onclick="openFilterDropdown()" class="btn btn-outline-secondary text-light-custom dropbtn">
-                <% if (sort) {%>
-                <b>Filter: </b><%=sort%>
-                <%} else {%>
-                    Filter
-                <%}%>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-filter dropbtn" viewBox="0 0 16 16">
-                    <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
-                </svg>
-            </button>
-            <div id="myDropdown" class="dropdown-menu" style="right: 16%;">
-                <a class="dropdown-item" href="/explore/sort/date_time">Date/Time</a>
-                <a class="dropdown-item" href="/explore/sort/identification">Identification Status</a>
-                <a class="dropdown-item" id="location-dropdown" href="/explore/sort/location">Location</a>
-            </div>
-        </div>
-
-    </nav>
-
-    <div class="row row-cols-1 row-cols-lg-4 row-cols-md-3 g-4 pt-4 px-2 px-md-5 px-sm-5">
-        <% data.forEach(plant => { %>
-            <div class="col">
-                <a id="plantLink_<%= plant._id %>" href="/plants/<%= plant._id %>">
-                    <div class="card h-100 hover-shadow">
-                        <img src="/<%= plant.img %>" class="card-img-top cropped-image" alt="...">
-                        <div class="card-body">
-                            <% if (plant.name) { %>
-                                <h5 class="card-title">
-                                    <%= plant.name %>
-                                </h5>
-                            <% } %>
-                            <% if (plant.enableSuggestions) { %>
-                                <h6><span class="badge bg-warning px-2 py-1">Not Identified</span></h6>
-                            <% } else { %>
-                                <h6><span class="badge bg-custom-primary px-2 py-1">Identified</span></h6>
-                            <% } %>
-                            <p class="card-text"><%= plant.description %></p>
-<!--                            <br>-->
-<!--                            <button class="btn btn-primary">View Plant</button>-->
-                        </div>
-                        <div class="card-footer">
-                            <% const date = new Date(Date.parse(plant.date));
-
-                                // Location extraction
-                                function extractLatLong(locationString) {
-                                    // Regular expression to match latitude and longitude values
-                                    const regex = /lat\s*(-?\d+\.\d+)\s*long\s*(-?\d+\.\d+)/;
-                                    const match = locationString.match(regex);
-
-                                    if (match) {
-                                        // Extract latitude and longitude from the regex match
-                                        const lat = parseFloat(match[1]);
-                                        const long = parseFloat(match[2]);
-                                        return { lat, long };
-                                    } else {
-                                        // No match
-                                        return null;
-                                    }
-                                }
-
-                                function formatCoordinates(lat, lng) {
-                                    const formattedLat = `Lat: ${lat?.toFixed(5)}...`;
-                                    const formattedLng = `Long: ${lng?.toFixed(5)}...`;
-                                    return `${formattedLat}, ${formattedLng}`;
-                                }
-
-                                const location = extractLatLong(plant.location);
-
-                                const formattedCoordinates = formatCoordinates(location?.lat, location?.long);
-                            %>
-                            <small class="text-muted">Found at <strong><%= formattedCoordinates %></strong>, on <strong><%= date.toLocaleDateString('en-GB') %></strong></small>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        <% }); %>
     </div>
 
-    <script src="js/bootstrap.min.js"></script>
+    <div class="flex-grow-1"></div>
+
+    <div class="dropdown px-4">
+        <button onclick="openFilterDropdown()" class="btn btn-outline-secondary text-light-custom dropbtn">
+            <% if (sort) { %>
+                <b>Filter: </b><%= sort %>
+            <% } else { %>
+                Filter
+            <% } %>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                 class="bi bi-filter dropbtn" viewBox="0 0 16 16">
+                <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
+            </svg>
+        </button>
+        <div id="myDropdown" class="dropdown-menu" style="right: 16%;">
+            <a class="dropdown-item" href="/explore/sort/date_time">Date/Time</a>
+            <a class="dropdown-item" href="/explore/sort/identification">Identification Status</a>
+            <a class="dropdown-item" id="location-dropdown" href="/explore/sort/location">Location</a>
+        </div>
+    </div>
+
+</nav>
+<div class="row row-cols-1 row-cols-lg-4 row-cols-md-3 g-4 pt-4 px-2 px-md-5 px-sm-5" id="content">
+</div>
+
+<script src="js/bootstrap.min.js"></script>
 </body>
-<script src="/javascripts/explore.js"></script>
-<script src="/javascripts/indexdb-utility.js"></script>
 </html>
 
 <script>
-    function openFilterDropdown() {
-        document.getElementById("myDropdown").classList.toggle("show");
-    }
+  function openFilterDropdown() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
 
-    // Close the dropdown menu if the user clicks outside of it
-    window.onclick = function(event) {
-        if (!event.target.matches('.dropbtn')) {
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
-                }
-            }
+  // Close the dropdown menu if the user clicks outside of it
+  window.onclick = function (event) {
+    if (!event.target.matches('.dropbtn')) {
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      var i;
+      for (i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+          openDropdown.classList.remove('show');
         }
+      }
     }
+  }
 
-    // Get user location
-    if ("geolocation" in navigator) {
-        // Geolocation is available
-        navigator.geolocation.getCurrentPosition(function(position) {
-            const lat = position.coords.latitude;
-            const long = position.coords.longitude;
+  // Get user location
+  if ("geolocation" in navigator) {
+    // Geolocation is available
+    navigator.geolocation.getCurrentPosition(function (position) {
+      const lat = position.coords.latitude;
+      const long = position.coords.longitude;
 
-            const locationDropdown = document.getElementById('location-dropdown');
+      const locationDropdown = document.getElementById('location-dropdown');
 
-            // Construct the URL with latitude and longitude as query parameters
-            locationDropdown.href = `/explore/sort/location?lat=${lat}&long=${long}`;
+      // Construct the URL with latitude and longitude as query parameters
+      locationDropdown.href = `/explore/sort/location?lat=${lat}&long=${long}`;
 
 
-        }, function(error) {
-            // Handle errors
-            switch(error.code) {
-                case error.PERMISSION_DENIED:
-                    console.error("User denied the request for Geolocation.");
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    console.error("Location information is unavailable.");
-                    break;
-                case error.TIMEOUT:
-                    console.error("The request to get user location timed out.");
-                    break;
-                case error.UNKNOWN_ERROR:
-                    console.error("An unknown error occurred.");
-                    break;
-            }
-        });
-    } else {
-        // Geolocation is not available
-        console.error("Geolocation is not supported by this browser.");
-    }
-
-    // Get the userID from localStorage
-    const userID = localStorage.getItem('userID');
-
-    // Attach userID to the href of each plant link
-    const plantLinks = document.querySelectorAll('[id^="plantLink_"]');
-    plantLinks.forEach(link => {
-        const plantId = link.getAttribute('id').split('_')[1];
-        link.href = `/plants/${plantId}?userID=${encodeURIComponent(userID)}`;
+    }, function (error) {
+      // Handle errors
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          console.error("User denied the request for Geolocation.");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          console.error("Location information is unavailable.");
+          break;
+        case error.TIMEOUT:
+          console.error("The request to get user location timed out.");
+          break;
+        case error.UNKNOWN_ERROR:
+          console.error("An unknown error occurred.");
+          break;
+      }
     });
+  } else {
+    // Geolocation is not available
+    console.error("Geolocation is not supported by this browser.");
+  }
+
+
 </script>

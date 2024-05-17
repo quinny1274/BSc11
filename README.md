@@ -1,5 +1,7 @@
 # BSc11
 The GitHub repository can be found at this link https://github.com/quinny1274/BSc11.
+
+The video demonstrating the web app can be found at this link https://drive.google.com/file/d/1oN4ER8x_-w56R3kpKmiIJyozHDjZQwNe/view?usp=sharing
 ## SOFTWARE CONFIGURATION AND USAGE GUIDE
 In the terminal under the BSc11 directory run npm install 
 

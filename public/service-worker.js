@@ -14,6 +14,8 @@ self.addEventListener('install', event => {
       cache.addAll([
         '/',
         '/explore',
+        '/explore/sort/identification',
+        '/explore/sort/date_time',
         '/create',
         '/js/bootstrap.min.js',
         '/css/bootstrap.min.css',
@@ -96,7 +98,7 @@ self.addEventListener('fetch', event => {
         return cachedResponse;
       } else {
         console.log('Cached Page Not Found');
-        return new Response('Cached Page Not Found');
+        return new Response('Page Not Found');
       }
     }
   })());

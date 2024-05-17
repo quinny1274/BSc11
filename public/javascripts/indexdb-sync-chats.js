@@ -56,10 +56,8 @@ const getAllSyncChats = (syncChatIndexDB) => {
 
 // Function to delete a syn
 const deleteSyncChatFromIndexDB = (syncChatIndexDB, id) => {
-  console.log("HERE");
   const transaction = syncChatIndexDB.transaction([syncChatsIndexDBName], "readwrite");
   const chatStore = transaction.objectStore(syncChatsIndexDBName);
-  console.log(id);
   const deleteRequest = chatStore.delete(id);
   deleteRequest.addEventListener("success", () => {
     console.log("Deleted " + id);

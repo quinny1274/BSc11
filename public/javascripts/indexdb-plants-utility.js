@@ -145,10 +145,8 @@ const getAllSyncPlants = (syncPlantIndexDB) => {
 
 // Function to delete a syn
 const deleteSyncPlantFromIndexDB = (syncPlantIndexDB, id) => {
-  console.log("HERE");
   const transaction = syncPlantIndexDB.transaction([syncPlantsIndexDBName], "readwrite");
   const plantStore = transaction.objectStore(syncPlantsIndexDBName);
-  console.log(id);
   const deleteRequest = plantStore.delete(id);
   deleteRequest.addEventListener("success", () => {
     console.log("Deleted " + id);

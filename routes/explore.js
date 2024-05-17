@@ -72,7 +72,7 @@ router.get('/sort/location', function(req, res, next) {
     // Sort the data based on distance
     data.sort((a, b) => a.distance - b.distance);
 
-    res.render('explore', { title: 'Explore', data: data, sort: "Identification" });
+    res.render('explore', { title: 'Explore', data: data, sort: "Location" });
   })
 });
 

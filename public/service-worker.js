@@ -161,7 +161,7 @@ function syncChats(event) {
         for (const syncChat of syncChats) {
           console.log('Service Worker: Syncing new Chat: ', syncChat);
 
-          const formData = new FormData();
+          const formData = new URLSearchParams();
           formData.append("plantId", syncChat.plantId);
           formData.append("message", syncChat.message);
           formData.append("userId", syncChat.userId);
@@ -169,6 +169,9 @@ function syncChats(event) {
           fetch('http://localhost:3000/plants/addChat', {
             method: 'POST',
             body: formData,
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
           }).then(() => {
             console.log('Service Worker: Syncing new Chat: ', syncChat, ' done');
             deleteSyncChatFromIndexDB(syncPostDB, syncChat.id);

@@ -3,7 +3,7 @@ let globalPlantId = null;
 let socket = io();
 
 function init(plantId) {
-  socket.on('joined', function (plantId, userId) {
+  socket.on('join', function (plantId, userId) {
     if (userId === globalUserId) {
     } else {
       writeOnHistory('<b>' + userId + '</b>' + 'joined room' + plantId)
@@ -47,15 +47,6 @@ function sendChatText() {
     console.log('chat', globalPlantId, globalUserId, chatText)
     socket.emit('chat', globalPlantId, globalUserId, chatText);
   }
-}
-
-function sendChatTextWithParams(plantId, message, userId) {
-  try {
-    socket.emit('chat', plantId, userId, message);
-  } catch (e) {
-    return false;
-  }
-  return true;
 }
 
 function connectToPlantChat(plantId, userId) {

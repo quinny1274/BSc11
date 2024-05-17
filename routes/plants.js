@@ -18,9 +18,8 @@ router.post('/addSuggestion', async function (req, res) {
   }
 });
 
-router.post('/addChat', async function (req, res) {
+router.post('/addChat', function (req, res) {
   let userData = req.body;
-
   chats.create(userData.plantId, userData.message, userData.userId).then(plant => {
     console.log(plant);
     res.status(200).send(plant);

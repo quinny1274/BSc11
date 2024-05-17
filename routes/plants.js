@@ -14,7 +14,7 @@ router.post('/addSuggestion', async function (req, res) {
     await renderPlantPage(res, plantId, nickname, userData.suggestedName);
   } else if (req.body.action === 'addSuggestion') {
     let result = suggestionsController.create(userData, nickname);
-    res.redirect(`/plants/${userData.plantId}`);
+    res.redirect(`/plants/id/${userData.plantId}?userID=${nickname}`);
   }
 });
 
@@ -30,7 +30,7 @@ router.post('/addChat', function (req, res) {
 });
 
 
-router.get('/:id', async function(req, res) {
+router.get('/id/:id', async function(req, res) {
   const plantId = req.params.id;
   const nickname = req.query.userID;
 
@@ -40,7 +40,7 @@ router.get('/:id', async function(req, res) {
 router.post('/updateName', function (req, res) {
   let userData = req.body;
   let result = plants.updateName(userData);
-  res.redirect(`/plants/${userData.plantId}`);
+  res.redirect(`/plants/id/${userData.plantId}`);
 });
 
 

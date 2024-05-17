@@ -56,7 +56,7 @@ function buildAndInsertPlants(db) {
     for (const plant of plants) {
       htmlContent += `
             <div class="col">
-                <a href="/plants/${plant._id}?userID=${encodeURIComponent(userID)}">
+                <a href="/plants/id/${plant._id}?userID=${encodeURIComponent(userID)}">
                     <div class="card h-100 hover-shadow">
                         <img src="/${plant.img}" class="card-img-top cropped-image" alt="...">
                         <div class="card-body">

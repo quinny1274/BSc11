@@ -18,6 +18,8 @@
 </head>
 <body onload="init('<%= plant.id %>')" class="pt-0 px-0">
 
+<input type="hidden" id="nickname" name="nickname" value="<%= nickname %>">
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
         <div class="d-flex align-items-center px-4">
             <a class="navbar-brand" href="/explore">PlantPedia</a>
@@ -83,7 +85,7 @@
                     <% for (var i = 0; i < suggestions.length; i++) { %>
                         <p><%= suggestions[i].suggestedName %></p>
                     <% } %>
-                    <form id="suggestionForm" action="/plants/addSuggestion" method="POST" class="mt-3">
+                    <form id="suggestionForm" action="/plants/addSuggestion?userID=<%= nickname %>" method="POST" class="mt-3">
                         <div class="form-group">
                             <input type="hidden" id="plantId" name="plantId" value="<%= plant.id %>">
                             <input type="text" class="form-control w-75" name="suggestedName" placeholder="<%= dbPediaSuggestions.length > 0 ? dbPediaSuggestions[0] : 'Suggestion' %>" list="list-timezone" id="suggestedName">
@@ -98,7 +100,7 @@
                         </div>
                     </form>
                 <% } else if (!wasPlantCreatedByUser && suggestions.length === 0) { %>
-                    <form id="suggestionForm" action="/plants/addSuggestion" method="POST" class="mt-3">
+                    <form id="suggestionForm" action="/plants/addSuggestion?userID=<%= nickname %>" method="POST" class="mt-3">
                         <div class="form-group">
                             <input type="hidden" id="plantId" name="plantId" value="<%= plant.id %>">
                             <input type="text" class="form-control w-75" name="suggestedName" placeholder="<%= dbPediaSuggestions.length > 0 ? dbPediaSuggestions[0] : 'Suggestion' %>" list="list-timezone" id="suggestedName">

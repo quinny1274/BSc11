@@ -77,7 +77,7 @@ self.addEventListener('fetch', event => {
         }
       }
       const networkResponse = await fetch(event.request);
-      if (event.request.url.includes("http://localhost:3000/public/images/uploads/") || event.request.url.includes("http://localhost:3000/plants/")) {
+      if (event.request.url.includes("http://localhost:3000/public/images/uploads/") || event.request.url.includes("http://localhost:3000/plants/id/")) {
         const dynamicCache = await caches.open('dynamic');
         const clonedResponse = networkResponse.clone();
         await dynamicCache.put(event.request, clonedResponse);

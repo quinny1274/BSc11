@@ -1,4 +1,5 @@
 importScripts('/javascripts/indexdb-plants-utility.js');
+// importScripts('/javascripts/indexdb-sync-chats.js');
 
 // Use the install event to pre-cache all initial resources.
 self.addEventListener('install', event => {
@@ -23,6 +24,7 @@ self.addEventListener('install', event => {
         '/javascripts/explore.js',
         '/javascripts/indexdb-plants-utility.js',
         '/javascripts/indexdb-chats-utility.js',
+        '/javascripts/indexdb-sync-chats.js',
         '/stylesheets/style.css',
         '/images/image_icon.png',
         // b,
@@ -73,7 +75,7 @@ self.addEventListener('fetch', event => {
         }
       }
       const networkResponse = await fetch(event.request);
-      if (event.request.url.includes("http://localhost:3000/public/images/uploads/") || event.request.url.includes("http://localhost:3000/plants/")){
+      if (event.request.url.includes("http://localhost:3000/public/images/uploads/") || event.request.url.includes("http://localhost:3000/plants/")) {
         const dynamicCache = await caches.open('dynamic');
         const clonedResponse = networkResponse.clone();
         await dynamicCache.put(event.request, clonedResponse);
@@ -90,7 +92,7 @@ self.addEventListener('fetch', event => {
       const cachedResponse = await staticCache.match(event.request);
       if (dynamicCachedResponse) {
         return dynamicCachedResponse;
-      }else if (cachedResponse) {
+      } else if (cachedResponse) {
         return cachedResponse;
       } else {
         return new Response('Cached Page Not Found');
@@ -101,6 +103,11 @@ self.addEventListener('fetch', event => {
 
 // Sync event to sync the plants
 self.addEventListener('sync', event => {
+  syncPlants(event);
+  syncChats(event);
+});
+
+function syncPlants(event) {
   if (event.tag === 'sync-plant') {
     console.log('Service Worker: Syncing new Plants');
     openSyncPlantsIndexDB().then((syncPostDB) => {
@@ -143,4 +150,25 @@ self.addEventListener('sync', event => {
       });
     });
   }
-});
+}
+
+function syncChats(event) {
+  if (event.tag === 'sync-chat') {
+    console.log('Service Worker: Syncing new Chats');
+    openSyncChatsIndexDB().then((syncPostDB) => {
+      getAllSyncChats(syncPostDB).then((syncChats) => {
+        for (const syncChat of syncChats) {
+          console.log('Service Worker: Syncing new Plant: ', syncChat);
+
+          let result = sendChatTextWithParams(syncChat.plantId, syncChat.message, syncChat.userId)
+          if (result) {
+            console.log('Service Worker: Syncing new Plant: ', syncChat, ' done');
+            deleteSyncPlantFromIndexDB(syncPostDB, syncChat.id);
+          } else {
+            console.error('Service Worker: Syncing new Plant: ', syncChat, ' failed');
+          }
+        }
+      });
+    });
+  }
+}

@@ -38,8 +38,24 @@ function init(plantId) {
 
 function sendChatText() {
   let chatText = document.getElementById('chat_input').value;
-  console.log('chat', globalPlantId, globalUserId, chatText)
-  socket.emit('chat', globalPlantId, globalUserId, chatText);
+  if (!navigator.onLine) {
+    openSyncChatsIndexDB().then((db) => {
+      addNewChatToSync(db, globalPlantId, chatText, globalUserId);
+      writeOnHistory('<b>' + 'Me' + ':</b> ' + chatText)
+    });
+  } else {
+    console.log('chat', globalPlantId, globalUserId, chatText)
+    socket.emit('chat', globalPlantId, globalUserId, chatText);
+  }
+}
+
+function sendChatTextWithParams(plantId, message, userId) {
+  try {
+    socket.emit('chat', plantId, userId, message);
+  } catch (e) {
+    return false;
+  }
+  return true;
 }
 
 function connectToPlantChat(plantId, userId) {

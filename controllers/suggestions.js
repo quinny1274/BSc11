@@ -8,7 +8,6 @@ exports.create = function (userData, userId) {
     });
 
     return suggestion.save().then(suggestion => {
-        console.log(suggestion);
 
         return JSON.stringify(suggestion);
     }).catch(err => {

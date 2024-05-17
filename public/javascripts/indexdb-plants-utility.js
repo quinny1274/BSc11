@@ -4,7 +4,6 @@ const syncPlantsIndexDBName = "sync-plants"
 // Function to handle adding a new plant
 const addNewPlantToSync = (syncPlantIndexDB, formData) => {
   console.log("Starting Sync add");
-  console.log(formData);
   if (formData) {
     console.log("Sync add");
     const transaction = syncPlantIndexDB.transaction([syncPlantsIndexDBName], "readwrite")

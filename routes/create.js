@@ -24,7 +24,7 @@ router.post('/add', upload.single('img'), function (req, res, next) {
   let userData = req.body;
   let filePath = req.file.path;
   plants.create(userData, filePath).then(plant => {
-    console.log(plant);
+    // console.log(plant);
     res.status(200).send(plant);
   }).catch(err => {
     console.log(err);

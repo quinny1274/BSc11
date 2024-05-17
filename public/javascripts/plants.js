@@ -18,7 +18,7 @@ function init(plantId) {
   })
   let userId = localStorage.getItem('userID');
   connectToPlantChat(plantId, userId)
-  socket.emit('history', globalPlantId);
+
   if (!navigator.onLine) {
     openChatsIndexDB().then((db) => {
       getAllChats(db).then((chats) => {
@@ -33,6 +33,8 @@ function init(plantId) {
         })
       });
     });
+  } else {
+    socket.emit('history', globalPlantId);
   }
 }
 

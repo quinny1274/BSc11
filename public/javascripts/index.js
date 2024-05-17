@@ -49,15 +49,5 @@ window.onload = function () {
       });
     });
 
-  } else {
-    console.log("Offline mode")
-    openPlantsIndexDB().then((db) => {
-      getAllPlants(db).then((todos) => {
-        for (const todo of todos) {
-          // insertTodoInList(todo)
-        }
-      });
-    });
-
   }
 }

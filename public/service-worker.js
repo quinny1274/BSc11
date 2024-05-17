@@ -31,15 +31,14 @@ self.addEventListener('install', event => {
       console.log("error occured while caching...")
     }
 
-    try {
-      const cache = await caches.open("dynamic");
-      cache.addAll([
-        '/plants/66469504721f0aafda6beabd?userID=quinny1274',
-      ]);
-      console.log('Service Worker: App Shell Cached');
-    } catch {
-      console.log("error occured while caching...")
-    }
+    // try {
+    //   const cache = await caches.open("dynamic");
+    //   cache.addAll([
+    //   ]);
+    //   console.log('Service Worker: App Shell Cached');
+    // } catch {
+    //   console.log("error occured while caching...")
+    // }
 
   })());
 });
